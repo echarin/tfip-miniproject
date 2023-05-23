@@ -7,10 +7,12 @@ import { ServiceWorkerModule } from '@angular/service-worker';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { MaterialModule } from './material.module';
+import { ExpenseFormComponent } from './components/expense-form/expense-form.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    ExpenseFormComponent
   ],
   imports: [
     BrowserModule,
