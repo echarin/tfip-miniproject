@@ -13,6 +13,7 @@ import { ErrorService } from 'src/app/services/error.service';
 })
 export class ExpenseFormComponent implements OnInit {
   expenseForm!: FormGroup;
+  categories: string[] = [];
   isLoading: boolean = false;
   errorMessage: string | null = null;
   successMessage: string | null = null;
@@ -29,8 +30,18 @@ export class ExpenseFormComponent implements OnInit {
       category: this.fb.control({value: null, disabled: this.isLoading}, [ Validators.required ]),
       amount: this.fb.control({value: null, disabled: this.isLoading}, [ Validators.required, Validators.min(0.01) ]),
       date: this.fb.control({value: null, disabled: this.isLoading}, [ Validators.required ]),
+      description: this.fb.control({value: null, disabled: this.isLoading})
     });
+
+    this.fetchCategories();
   }
+
+  fetchCategories(): void {
+    // We hardcode this for now
+    // If user is implemented, then we would fetch categories from user
+    this.categories = ['Food', 'Transport', 'Rent', 'Entertainment', 'Other'];
+  }
+  
 
   onSubmit(): void {
     if (this.expenseForm.valid) {
@@ -67,5 +78,6 @@ export class ExpenseFormComponent implements OnInit {
     this.expenseForm.get('category')?.[method]();
     this.expenseForm.get('amount')?.[method]();
     this.expenseForm.get('date')?.[method]();
+    this.expenseForm.get('description')?.[method]();
   }
 }

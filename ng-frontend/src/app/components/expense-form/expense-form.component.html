@@ -1,7 +1,9 @@
 <form [formGroup]="expenseForm" (ngSubmit)="onSubmit()">
   <div>
     <label for="category">Category</label>
-    <input id="category" type="text" formControlName="category">
+    <select id="category" formControlName="category">
+      <option *ngFor="let category of categories" [value]="category.toLowerCase()">{{ category }}</option>
+    </select>
     <p *ngIf="expenseForm.get('category')?.hasError('required') && expenseForm.get('category')?.touched">
       Please specify category.
     </p>
@@ -19,6 +21,10 @@
     <p *ngIf="expenseForm.get('date')?.hasError('required') && expenseForm.get('date')?.touched">
       Please specify date.
     </p>
+  </div>
+  <div>
+    <label for="description">Description</label>
+    <textarea name="description" id="description" cols="20" rows="5" formControlName="description"></textarea>
   </div>
   <button type="submit" [disabled]="expenseForm.invalid || isLoading">Add Expense</button>
   <div *ngIf="isLoading">Submitting...</div>
