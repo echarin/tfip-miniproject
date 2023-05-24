@@ -2,7 +2,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Subject, takeUntil } from 'rxjs';
-import { Expense } from 'src/app/models/expense';
+import { Expense } from 'src/app/models/models';
 import { BudgetService } from 'src/app/services/budget.service';
 import { ErrorService } from 'src/app/services/error.service';
 

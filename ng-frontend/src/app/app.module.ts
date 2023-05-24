@@ -8,11 +8,13 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { MaterialModule } from './material.module';
 import { ExpenseFormComponent } from './components/expense-form/expense-form.component';
+import { DashboardComponent } from './components/dashboard/dashboard.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    ExpenseFormComponent
+    ExpenseFormComponent,
+    DashboardComponent
   ],
   imports: [
     BrowserModule,

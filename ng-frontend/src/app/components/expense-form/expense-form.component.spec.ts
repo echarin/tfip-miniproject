@@ -3,11 +3,10 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { of, throwError } from 'rxjs';
-import { Expense } from 'src/app/models/expense';
+import { Expense } from 'src/app/models/models';
 import { BudgetService } from 'src/app/services/budget.service';
-import { ErrorService } from 'src/app/services/error.service';
+import { ErrorService, SERVER_ERROR_MESSAGE } from 'src/app/services/error.service';
 import { ExpenseFormComponent } from './expense-form.component';
-import { CLIENT_ERROR_MESSAGE, BAD_REQUEST_MESSAGE, UNAUTHORISED_REQUEST_MESSAGE, SERVER_ERROR_MESSAGE, UNEXPECTED_ERROR_MESSAGE } from 'src/app/services/error.service';
 
 describe('ExpenseFormComponent', () => {
   let component: ExpenseFormComponent;
