@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ExpenseFormComponent } from './expense-form.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { ExpenseFormComponent } from './expense-form.component';
 
 describe('ExpenseFormComponent', () => {
   let component: ExpenseFormComponent;
@@ -10,7 +10,9 @@ describe('ExpenseFormComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [ ExpenseFormComponent ],
-      imports: [ ReactiveFormsModule ]
+      imports: [
+        ReactiveFormsModule,
+      ]
     })
     .compileComponents();
 

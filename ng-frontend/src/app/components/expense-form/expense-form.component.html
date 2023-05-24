@@ -2,14 +2,26 @@
   <div>
     <label for="category">Category</label>
     <input id="category" type="text" formControlName="category">
+    <p *ngIf="expenseForm.get('category')?.hasError('required') && expenseForm.get('category')?.touched">
+      Please specify category.
+    </p>
   </div>
   <div>
     <label for="amount">Amount</label>
-    <input id="amount" type="text" formControlName="amount">
+    <input id="amount" type="number" formControlName="amount">
+    <p *ngIf="expenseForm.get('amount')?.hasError('required') && expenseForm.get('amount')?.touched">
+      Please specify amount.
+    </p>
   </div>
   <div>
     <label for="date">Date</label>
-    <input id="date" type="text" formControlName="date">
+    <input id="date" type="date" formControlName="date">
+    <p *ngIf="expenseForm.get('date')?.hasError('required') && expenseForm.get('date')?.touched">
+      Please specify date.
+    </p>
   </div>
-  <button type="submit">Add Expense</button>
+  <button type="submit" [disabled]="expenseForm.invalid || isLoading">Add Expense</button>
+  <div *ngIf="isLoading">Submitting...</div>
+  <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
+  <div *ngIf="successMessage">{{ successMessage }}</div>
 </form>
