@@ -1,3 +1,4 @@
+import { OverlayContainer } from '@angular/cdk/overlay';
 import { Component } from '@angular/core';
 
 @Component({
@@ -7,4 +8,10 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'client';
+
+  constructor(public overlayContainer: OverlayContainer) {}
+
+  ngOnInit() {
+    this.overlayContainer.getContainerElement().classList.add('unicorn-dark-theme');
+  }
 }

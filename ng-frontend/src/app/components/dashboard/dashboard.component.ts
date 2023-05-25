@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { Budget } from 'src/app/models/models';
 
 @Component({
   selector: 'app-dashboard',
@@ -7,5 +6,7 @@ import { Budget } from 'src/app/models/models';
   styleUrls: ['./dashboard.component.css']
 })
 export class DashboardComponent {
-  budget!: Budget
+  today: number = Date.now();
+
+  constructor() { }
 }

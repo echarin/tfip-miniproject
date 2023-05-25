@@ -92,22 +92,43 @@
 ### Spring Boot/Backend
 
 - Use POST to handle either `x-www-form-urlencoded` and/or JSON and/or multipart payload
+  - Accept user input e.g. creating a budget, adding a transaction, registering a new user, via HTTP POST
+  - Accept JSON payloads
 - Making HTTP request to external RESTful API
+  - Exchange Rate API (<https://exchangeratesapi.io/>) - convert between different currencies
+  - Plaid (<https://plaid.com/>) - financial data API to link users' bank accounts to your application and fetch transaction data
+  - SendGrid Email API (<https://sendgrid.com/>) - send transaction notifications or password reset emails to users
+  - Easy way out: use a weather API to just fetch weather info and display it on the dashboard
 - Parameterised routes
+  - e.g. `/users/{userId}`, `/budgets/{budgetId}`
 - Query string
+  - e.g. `/transactions?userId=1&startDate=2023-01-01&endDate=2023-01-31`
 - Must support more than 1 user
+  - Implement user registration and authentication
+  - Use Spring Security
+  - Store user information in MySQL database, authenticate users based on username and password
+  - Once authenticated, users should be issued a JWT (JSON Web Token) for authorising subsequent requests
 
 ### Database
 
 - Must use MySQL
+  - Store structured data e.g. users, budgets, category groups, categories, expenses
+  - Keep foreign keys to create relationships between your tables and enforce data integrity
 - Modelling data relationships: 1 to 1, 1 to many
+  - Users to budgets: 1 to 1
+  - The rest: 1 to many
 - Demonstrate data integrity and consistency when updating multiple tables
+  - Use transactions
+  - For example, when updating a `Budget` and related `CategoryGroups` and an error occurred, then changes should be rolled back to ensure data consistency
 - Must use another database type e.g. key/value, blob, graph, document
+  - Redis/MongoDB can be used for caching/storing session data, temporary data, user preferences, or even the entire user interface state for faster load times
+  - In the case of your Angular application, you could serialise the entire state of the application (including all the `Budgets`, `CategoryGroups`, `Categories`, `Expenses`) and store it as a document in MongoDB
+    - Makes the application faster and more responsive, as you can load this state directly when the user logs in, instead of making multiple requests to your MySQL database
 
 ### Deployment
 
-- The application that you have developed must be publicly accessible. You can deploy your application either as 2 separate deployments, frontend and backend or as a single deployment where the frontend is served from the backend. Applications can be deployed to Railway or any equivalent cloud PaaS platform like Heroku, AppEngine, etc If Angular is deployed separately, they can be deployed to static web hosting sites or JAM platforms like Vercel, Cloudflare or serving it from your hosted web server. Note: you cannot use Github pages for hosting your application
-- All databases must be deployed to the ‘cloud’. They can be deployed as VMs in public cloud or using managed database services
+- The application that you have developed must be publicly accessible. You can deploy your application either as 2 separate deployments, frontend and backend or as a single deployment where the frontend is served from the backend. Applications can be deployed to Railway or any equivalent cloud PaaS platform like Heroku, AppEngine, etc. If Angular is deployed separately, they can be deployed to static web hosting sites or JAM platforms like Vercel, Cloudflare or serving it from your hosted web server. Note: you cannot use GitHub pages for hosting your application.
+- All databases must be deployed to the 'cloud'. They can be deployed as VMs in public cloud or using managed database services
 
 ## Optional Requirements
 

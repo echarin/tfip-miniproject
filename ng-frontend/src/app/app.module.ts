@@ -9,12 +9,18 @@ import { AppComponent } from './app.component';
 import { MaterialModule } from './material.module';
 import { ExpenseFormComponent } from './components/expense-form/expense-form.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
+import { SettingsComponent } from './components/settings/settings.component';
+import { BudgetComponent } from './components/budget/budget.component';
+import { ExpensesComponent } from './components/expenses/expenses.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     ExpenseFormComponent,
-    DashboardComponent
+    DashboardComponent,
+    SettingsComponent,
+    BudgetComponent,
+    ExpensesComponent
   ],
   imports: [
     BrowserModule,
