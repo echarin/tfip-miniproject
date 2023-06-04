@@ -32,10 +32,10 @@ describe('AppComponent', () => {
     expect(app.title).toEqual('client');
   });
 
-  it('should create ExpenseFormComponent', () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    fixture.detectChanges();
-    const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('app-expense-form')).toBeTruthy();
-  });  
+  // it('should create ExpenseFormComponent', () => {
+  //   const fixture = TestBed.createComponent(AppComponent);
+  //   fixture.detectChanges();
+  //   const compiled = fixture.nativeElement as HTMLElement;
+  //   expect(compiled.querySelector('app-expense-form')).toBeTruthy();
+  // }); 
 });

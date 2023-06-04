@@ -5,15 +5,15 @@
       <h2 class="date">{{ today | date: 'fullDate' | lowercase }}</h2>
     </div>
     <mat-nav-list>
-      <a mat-list-item routerLink="/settings" routerLinkActive="active-link" matTooltip="Settings">
+      <a mat-list-item routerLink="./settings" routerLinkActive="active-link" matTooltip="settings">
         <mat-icon matListItemIcon>settings</mat-icon>
         <span>settings</span>
       </a>
-      <a mat-list-item routerLink="/budget" routerLinkActive="active-link" matTooltip="Budget">
+      <a mat-list-item routerLink="./budget" routerLinkActive="active-link" matTooltip="budget">
         <mat-icon matListItemIcon>account_balance_wallet</mat-icon>
         <span>budget</span>
       </a>
-      <a mat-list-item routerLink="/expenses" routerLinkActive="active-link" matTooltip="Expenses">
+      <a mat-list-item routerLink="./expenses" routerLinkActive="active-link" matTooltip="expenses">
         <mat-icon matListItemIcon>list</mat-icon>
         <span>expenses</span>
       </a>

@@ -8,10 +8,4 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'client';
-
-  constructor(public overlayContainer: OverlayContainer) {}
-
-  ngOnInit() {
-    this.overlayContainer.getContainerElement().classList.add('unicorn-dark-theme');
-  }
 }

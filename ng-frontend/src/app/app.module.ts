@@ -12,6 +12,7 @@ import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { SettingsComponent } from './components/settings/settings.component';
 import { BudgetComponent } from './components/budget/budget.component';
 import { ExpensesComponent } from './components/expenses/expenses.component';
+import { FrontpageComponent } from './components/frontpage/frontpage.component';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import { ExpensesComponent } from './components/expenses/expenses.component';
     DashboardComponent,
     SettingsComponent,
     BudgetComponent,
-    ExpensesComponent
+    ExpensesComponent,
+    FrontpageComponent
   ],
   imports: [
     BrowserModule,

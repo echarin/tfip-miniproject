@@ -1,0 +1,34 @@
+.frontpage-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: var(--primary-bg-color);
+  color: var(--primary-text-color);
+}
+
+.app-name {
+  font-size: 3em;
+}
+
+.buttons {
+  margin-top: 2em;
+}
+
+button {
+  margin: 1em;
+}
+
+.dashboard-button {
+  background-color: var(--secondary-text-color);
+  color: var(--primary-bg-color);
+}
+
+.login-button, .signup-button {
+  color: var(--primary-text-color);
+}
+
+.login-button:hover, .signup-button:hover {
+  background-color: var(--hover-bg-color);
+}
