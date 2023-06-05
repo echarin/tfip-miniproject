@@ -46,6 +46,12 @@
 			<artifactId>hibernate-core</artifactId>
 		</dependency>
 
+		<!-- Spring Boot Starter Data REST -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-rest</artifactId>
+		</dependency>
+
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-devtools</artifactId>

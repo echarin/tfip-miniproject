@@ -17,6 +17,7 @@ import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Entity
 @Data
@@ -31,6 +32,8 @@ public class CategoryGroup {
     private String name;
 
     // No need nullable=false, because the foreign key is not nullable
+    // We exclude from ToString because otherwise we will call toString() recursively
+    @ToString.Exclude
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "budget_id")
     private Budget budget;
