@@ -1,0 +1,19 @@
+<!-- login.component.html -->
+<div @fadeInOut>
+  <form>
+    <div>
+      <mat-form-field appearance="fill">
+        <mat-label>email</mat-label>
+        <input matInput type="email" id="email" name="email">
+      </mat-form-field>
+    </div>
+    <div>
+      <mat-form-field appearance="fill">
+        <mat-label>password:</mat-label>
+        <input matInput type="password" id="password" name="password">
+      </mat-form-field>
+    </div>
+    <button mat-raised-button type="submit">login</button>
+  </form>
+  <p>don't have an account? <a (click)="switchToSignup()" style="cursor:pointer" mat-button>sign up here</a></p>
+</div>
