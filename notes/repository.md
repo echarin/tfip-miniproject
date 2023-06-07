@@ -1,7 +1,6 @@
 # Repository/Backend Database Stuff
 
 - Let's graduate from the `spring-jdbc` module and start using Spring Data JPA
-- 
 
 ## Dependencies
 
