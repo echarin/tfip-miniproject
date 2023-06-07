@@ -8,4 +8,8 @@ import ibf2022.tfipminiproject.entities.User;
 
 public interface UserRepository extends JpaRepository<User, UUID> {
     
+    // To prevent this particular DELETE operation
+    // @Override
+    // @RestResource(exported = false)
+    // void deleteById(UUID id);
 }

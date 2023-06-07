@@ -1,16 +1,13 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { DashboardComponent } from './components/dashboard/dashboard.component';
-import { SettingsComponent } from './components/settings/settings.component';
 import { BudgetComponent } from './components/budget/budget.component';
+import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { ExpensesComponent } from './components/expenses/expenses.component';
 import { FrontpageComponent } from './components/frontpage/frontpage.component';
+import { SettingsComponent } from './components/settings/settings.component';
 
 const routes: Routes = [
-  {
-    path: '',
-    component: FrontpageComponent
-  },
+  { path: '', component: FrontpageComponent },
   {
     path: 'dashboard',
     component: DashboardComponent,
@@ -20,7 +17,7 @@ const routes: Routes = [
       { path: 'expenses', component: ExpensesComponent },
       { path: '', redirectTo: 'budget', pathMatch: 'full' }
     ]
-  }
+  },
 ];
 
 @NgModule({

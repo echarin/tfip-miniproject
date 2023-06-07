@@ -1,11 +1,13 @@
 package ibf2022.tfipminiproject;
 
 import java.time.LocalDate;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.transaction.annotation.Transactional;
 
 import ibf2022.tfipminiproject.entities.Budget;
@@ -20,6 +22,7 @@ import ibf2022.tfipminiproject.repositories.ExpenseRepository;
 import ibf2022.tfipminiproject.repositories.UserRepository;
 
 @SpringBootApplication
+@EnableJpaAuditing
 public class TfipMiniprojectApplication implements CommandLineRunner {
 
 	@Autowired
@@ -44,10 +47,18 @@ public class TfipMiniprojectApplication implements CommandLineRunner {
 	@Override
 	@Transactional // This is required to prevent "detached entity passed to persist"
 	public void run(String... args) throws Exception {
-		// createUser();
+		// printUser();
+		// changeUserPassword();
+		// printUser();
 	}
 
 	public void createUser() {
+		User user = new User();
+		user.setEmail("justuser@mail.com");
+		user.setPassword("XXXXXXXX");
+	}
+
+	public void createUserWithEverything() {
 		Expense expense = new Expense();
 		expense.setAmount(30.00);
 		expense.setDate(LocalDate.now());
@@ -77,5 +88,20 @@ public class TfipMiniprojectApplication implements CommandLineRunner {
 		User savedUser = userRepository.save(user);
 
 		System.out.println(savedUser);
+	}
+
+	public void printUser() {
+		UUID uuid = UUID.fromString("b2344fdb-397f-4754-a46a-943845432214");
+		User user = userRepository.findById(uuid).orElse(null);
+		if (user != null) { System.out.println(user); }
+	}
+
+	public void changeUserPassword() {
+		UUID uuid = UUID.fromString("b2344fdb-397f-4754-a46a-943845432214");
+		User user = userRepository.findById(uuid).orElse(null);
+		if (user != null) { 
+			user.setPassword("newPassword"); 
+			userRepository.save(user);
+		}
 	}
 }

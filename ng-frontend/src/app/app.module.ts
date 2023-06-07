@@ -13,6 +13,8 @@ import { SettingsComponent } from './components/settings/settings.component';
 import { BudgetComponent } from './components/budget/budget.component';
 import { ExpensesComponent } from './components/expenses/expenses.component';
 import { FrontpageComponent } from './components/frontpage/frontpage.component';
+import { LoginComponent } from './components/login/login.component';
+import { SignupComponent } from './components/signup/signup.component';
 
 @NgModule({
   declarations: [
@@ -22,7 +24,9 @@ import { FrontpageComponent } from './components/frontpage/frontpage.component';
     SettingsComponent,
     BudgetComponent,
     ExpensesComponent,
-    FrontpageComponent
+    FrontpageComponent,
+    LoginComponent,
+    SignupComponent
   ],
   imports: [
     BrowserModule,
