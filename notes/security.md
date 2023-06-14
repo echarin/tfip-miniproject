@@ -5,6 +5,17 @@
 - JSON Web Tokens (JWT) are a popular way of handling authentication and authorisation in APIs
 - Provides a way to authenticate a user once, then use the generated token to validate the user's identity in subsequent requests
 
+## Spring Boot Dependencies
+
+```xml
+  <dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-security</artifactId>
+  </dependency>
+
+
+```
+
 ## User Creation/Login
 
 - Assuming email and password are used for login
