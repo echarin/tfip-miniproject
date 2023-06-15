@@ -8,6 +8,7 @@
 ## Spring Boot Dependencies
 
 ```xml
+  <!-- Spring Boot Starter Security -->
   <dependency>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-security</artifactId>
