@@ -2,7 +2,6 @@ package ibf2022.tfipminiproject.configs;
 
 import java.io.IOException;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -22,11 +21,11 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
-    @Autowired
-    private JwtService jwtService;
+    private static final int BEARER_TOKEN_PREFIX_LENGTH = "Bearer ".length();
 
-    @Autowired
-    private UserDetailsService userDetailsService;
+    // Constructor injector (using @RequiredArgsConstructor)
+    private final JwtService jwtService;
+    private final UserDetailsService userDetailsService;
 
     @Override
     protected void doFilterInternal(
@@ -37,11 +36,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         final String authHeader = request.getHeader("Authorization");
         final String jwt;
         final String userEmail;
-        if (authHeader != null && authHeader.startsWith("Bearer ")) {
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             filterChain.doFilter(request, response);
             return;
         }
-        jwt = authHeader.substring(7); // "Bearer "
+        jwt = authHeader.substring(BEARER_TOKEN_PREFIX_LENGTH);
         userEmail = jwtService.extractUserEmail(jwt);
         if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = this.userDetailsService.loadUserByUsername(userEmail);
