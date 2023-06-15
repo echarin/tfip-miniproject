@@ -28,7 +28,8 @@ public class SecurityConfig {
         httpSecurity
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(authorize -> authorize
-                .requestMatchers("") // Endpoints that do not need JWT token
+                // Endpoints that do not need JWT token; these are for registration and authentication
+                .requestMatchers("/api/v1/auth/**") 
                 .permitAll()
                 .anyRequest()
                 .authenticated())
