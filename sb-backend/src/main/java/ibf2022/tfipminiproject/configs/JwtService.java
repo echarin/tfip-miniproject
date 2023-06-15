@@ -22,7 +22,7 @@ public class JwtService {
     @Value("${jwt.signingkey}")
     private String signingKey;
 
-    // 24 hours of token validity
+    // Token validity set to 24 hours
     private static final long JWT_TOKEN_VALIDITY = 1000 * 60 * 24;
 
     public String extractUserEmail(String token) {
@@ -36,6 +36,7 @@ public class JwtService {
         return claimResolver.apply(claims);
     }
 
+    // To generate JWT given the parameters
     public String generateToken(UserDetails userDetails) {
         return generateToken(new HashMap<>(), userDetails);
     }
