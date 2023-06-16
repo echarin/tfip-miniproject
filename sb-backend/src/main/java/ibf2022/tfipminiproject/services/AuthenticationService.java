@@ -1,32 +1,27 @@
-package ibf2022.tfipminiproject.auth;
+package ibf2022.tfipminiproject.services;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import ibf2022.tfipminiproject.configs.JwtService;
+import ibf2022.tfipminiproject.dtos.AuthenticationRequest;
+import ibf2022.tfipminiproject.dtos.AuthenticationResponse;
+import ibf2022.tfipminiproject.dtos.RegisterRequest;
 import ibf2022.tfipminiproject.entities.User;
 import ibf2022.tfipminiproject.repositories.UserRepository;
+import ibf2022.tfipminiproject.security.Role;
 import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
 public class AuthenticationService {
 
-    @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-
-    @Autowired
-    private JwtService jwtService;
-
-    @Autowired
-    private AuthenticationManager authManager;
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final JwtService jwtService;
+    private final AuthenticationManager authManager;
 
     public AuthenticationResponse register(RegisterRequest request) {
         User user = User.builder()

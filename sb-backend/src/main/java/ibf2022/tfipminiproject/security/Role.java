@@ -1,4 +1,4 @@
-package ibf2022.tfipminiproject.auth;
+package ibf2022.tfipminiproject.security;
 
 public enum Role {
     USER,

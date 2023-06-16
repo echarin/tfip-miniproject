@@ -1,4 +1,4 @@
-package ibf2022.tfipminiproject.configs;
+package ibf2022.tfipminiproject.services;
 
 import java.security.Key;
 import java.util.Date;
@@ -23,7 +23,7 @@ public class JwtService {
     private String signingKey;
 
     // Token validity set to 24 hours
-    private static final long JWT_TOKEN_VALIDITY = 1000 * 60 * 24;
+    private static final long JWT_TOKEN_VALIDITY = 1000 * 60 * 60 * 24;
 
     public String extractUserEmail(String token) {
         // Apply getSubject() onto the claims extracted from token

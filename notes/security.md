@@ -14,6 +14,29 @@
   - Each part is Base64Url encoded to form the three parts
   - Then the JWT is output with the three Base64-URL strings separated by dots, allowing for easy transmission through HTML and HTTP environments
 
+## Workflow
+
+- **User Authentication**
+  - The user provides their credentials (username and password) to the application
+  - Typically in a POST request to a `/authenticate` endpoint in the application
+- **Generate JWT**
+  - After the application has successfully authenticated the user, it will generate a JWT
+  - This JWT contains claims, which are statements (such as the username or roles) about the user
+  - The application then signs this token with a secret key using an algorithm like RS256/HS256, and returns it to the user
+- **Client stores the JWT**
+  - The client stores the JWT locally, such as in local storage, session storage or a cookie
+  - For web applications, it's better to store the JWT in a secure httpOnly cookie that is not accessible via JS, which mitigates the risk of XSS attacks
+- **Send JWT with requests**
+  - After the initial authentication, whenever the client makes a request to a secured endpoint, it includes the JWT in the HTTP Authorization header with the Bearer schema
+  - The header typically looks like this: `Authorization: Bearer <token>`
+  - If the client is a web application, then it can include the JWT as a cookie
+- **Server-side JWT Validation**: Before the request reaches the business logic of the backend, Spring Security's filters are applied via `JwtAuthenticationFilter`, which does the following:
+  - Extract the JWT from the Authorization header
+  - Validates the JWT, which involves checking the signature with the secret key and other checks such as verifying the expiration date of the token
+  - If the JWT is valid, the filter extracts the user details from the token; the user details are typically included in the token's claims
+  - The filter then creates an `Authentication` object and sets it in Spring's `SecurityContext`
+    - The `Authentication` object indicates that the current user is authenticated, and includes the user details and their authorities (roles)
+
 ### Decoding and Extracting Claims from JWTs
 
 -

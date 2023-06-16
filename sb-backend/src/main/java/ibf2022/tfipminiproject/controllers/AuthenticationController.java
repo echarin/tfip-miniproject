@@ -1,12 +1,15 @@
-package ibf2022.tfipminiproject.auth;
+package ibf2022.tfipminiproject.controllers;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import ibf2022.tfipminiproject.dtos.AuthenticationRequest;
+import ibf2022.tfipminiproject.dtos.AuthenticationResponse;
+import ibf2022.tfipminiproject.dtos.RegisterRequest;
+import ibf2022.tfipminiproject.services.AuthenticationService;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -14,8 +17,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class AuthenticationController {
 
-    @Autowired
-    private AuthenticationService authService;
+    private final AuthenticationService authService;
     
     @PostMapping("/register")
     public ResponseEntity<AuthenticationResponse> register(@RequestBody RegisterRequest request) {

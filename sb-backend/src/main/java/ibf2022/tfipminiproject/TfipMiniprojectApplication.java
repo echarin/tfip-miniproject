@@ -3,7 +3,6 @@ package ibf2022.tfipminiproject;
 import java.time.LocalDate;
 import java.util.UUID;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -20,25 +19,18 @@ import ibf2022.tfipminiproject.repositories.CategoryGroupRepository;
 import ibf2022.tfipminiproject.repositories.CategoryRepository;
 import ibf2022.tfipminiproject.repositories.ExpenseRepository;
 import ibf2022.tfipminiproject.repositories.UserRepository;
+import lombok.RequiredArgsConstructor;
 
 @SpringBootApplication
 @EnableJpaAuditing
+@RequiredArgsConstructor
 public class TfipMiniprojectApplication implements CommandLineRunner {
 
-	@Autowired
-	private ExpenseRepository expenseRepository;
-
-	@Autowired
-	private CategoryRepository categoryRepository;
-
-	@Autowired
-	private CategoryGroupRepository categoryGroupRepository;
-
-	@Autowired
-	private BudgetRepository budgetRepository;
-
-	@Autowired
-	private UserRepository userRepository;
+	private final ExpenseRepository expenseRepository;
+	private final CategoryRepository categoryRepository;
+	private final CategoryGroupRepository categoryGroupRepository;
+	private final BudgetRepository budgetRepository;
+	private final UserRepository userRepository;
 
 	public static void main(String[] args) {
 		SpringApplication.run(TfipMiniprojectApplication.class, args);
