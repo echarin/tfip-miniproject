@@ -9,9 +9,9 @@ import org.springframework.stereotype.Service;
 import ibf2022.tfipminiproject.dtos.AuthenticationRequest;
 import ibf2022.tfipminiproject.dtos.AuthenticationResponse;
 import ibf2022.tfipminiproject.dtos.RegisterRequest;
+import ibf2022.tfipminiproject.entities.Role;
 import ibf2022.tfipminiproject.entities.User;
 import ibf2022.tfipminiproject.repositories.UserRepository;
-import ibf2022.tfipminiproject.security.Role;
 import lombok.RequiredArgsConstructor;
 
 @Service
