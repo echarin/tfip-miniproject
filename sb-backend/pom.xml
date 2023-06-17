@@ -15,7 +15,7 @@
 	<description>Miniproject for TFIP</description>
 	<properties>
 		<jakarta-servlet.version>5.0.0</jakarta-servlet.version>
-		<java.version>20</java.version>
+		<java.version>17</java.version>
 	</properties>
 	<dependencies>
 		<dependency>

@@ -376,3 +376,7 @@ COPY --from=build /app/target/file.war /usr/local/tomcat/webapps
   - We use one stage (called `build`) to perform the actual Java build using Maven
   - In the second stage (second `FROM`), we copy in files from the build stage
   - The final image is only the last stage being created
+
+## Building a Java image
+
+Taken from [https://docs.docker.com/language/java/]
