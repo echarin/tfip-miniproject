@@ -8,10 +8,27 @@
 - GitHub Actions automates your software workflows, including building, testing and deploying applications
   - It can be used to automate building the Docker images and deploying them to the chosen PaaS platform
 
-## Motivation
+## Docker Overview
+
+### Motivation
 
 - Applications used to run on physical servers
 - Because resource boundaries for applications in a physical servers did not exist, there would be resource allocation issues where one application might hog up resources and cause other apps to underperform
+
+### Container
+
+- A container is a sandboxed process on your machine which is isolated from all other processes on the host machine
+- It is a runnable instance of an image - you can create, start, stop, move, or delete a container using the DockerAPI or CLI
+- Containers can be run on local machines, virtual machines or deployed to the cloud
+- They are portable and can be run on any OS
+- They are isolated from other containers, and run their own software, binaries and configurations
+
+### Container image
+
+- When running a container, it uses an isolated filesystem
+- The custom filesystem is provided by a container image
+- Since the image contains the container's filesystem, it must contain everything needed to run an app: all dependencies, configurations, scripts, binaries, etc.
+- The image also contains other configurations for the container, such as environment variables, a default command to run, and other metadata
 
 ## Possible starting workflow
 
@@ -160,3 +177,202 @@ docker run -dp 127.0.0.1:3000:3000 `
   - We can watch the logs using `docker logs <container-id>`
   - You can go when you see `Listening on port 3000`
   - When making a change to the files in `/src`, the changes are reflected almost immediately
+
+### Multicontainer apps
+
+- Each container should do one thing and do it well
+  - You may have to scale APIs and frontends differently than databases
+  - Separate containers let you version and update versions in isolation
+  - While you may use a container for the database locally, you may want to use a managed service for the database in production; you don't want to ship your database engine with your app then
+  - Running multiple processes will require a process manager (the container only starts one process), which adds complexity to container startup/shutdown
+- If you place multiple containers on the same network, they can talk to each other
+  - Two ways:
+    - Assign the network when starting the container
+    - Connect an already running container to a network
+- First, we create the network: `docker network create todo-app`
+- Assigning the network when starting the container
+
+```powershell
+docker run -d `
+     --network todo-app --network-alias mysql `
+     -v todo-mysql-data:/var/lib/mysql `
+     -e MYSQL_ROOT_PASSWORD=secret `
+     -e MYSQL_DATABASE=todos `
+     mysql:8.0
+```
+
+- The command
+  - You have specified the network in `--network`, where its alias is `mysql`
+  - There is a volume named `todo-mysql-data` mounted at `/var/lib/mysql` which is where MySQL stores its data
+    - Despite not running a `docker volume create` command, Docker recognises that you want to use a named volume and creates one automatically
+  - The `-e` flags are for setting environment variables
+- Connecting to the database
+  - `docker exec -it <mysql-container-id> mysql -u root -p`
+  - A password prompt will come up; use the password you've set as `MYSQL_ROOT_PASSWORD` through the `-e` flag
+  - You will enter the MySQL shell; do `SHOW DATABASES` to verify that you see the `todos` database which was the name you specified in `MYSQL_DATABASE`
+  - Type `exit` in the shell to return to the shell on your machine
+- Connecting a container to the database
+  - You can run another container on the same network, and then specify the database's IP address
+  - Run `docker run -it --network todo-app nicolaka/netshoot`; it has tools that are useful for troubleshooting or debugging networking issues
+    - In the container, use `dig mysql`, which will help you look up the IP address for the hostname `mysql`, which was the name you gave through the `--network-alias` flag
+    - In the answer section, you will see an `A` record for `mysql` that resolves to the IP address you will use
+  - You may set environment variables to specify MySQL connecting settings
+    - This is generally accepted for development but highly discouraged when running applications in production
+      - A more secure mechanism is to use the secret support provided by your container orchestration framework e.g. Kubernetes, which allows you to use sensitive information without including it in your application code
+  - Start the container while in the `getting-started/app` directory:
+
+```powershell
+docker run -dp 127.0.0.1:3000:3000 `
+   -w /app -v "$(pwd):/app" `
+   --network todo-app `
+   -e MYSQL_HOST=mysql `
+   -e MYSQL_USER=root `
+   -e MYSQL_PASSWORD=secret `
+   -e MYSQL_DB=todos `
+   node:18-alpine `
+   sh -c "yarn install && yarn run dev"
+```
+
+- Checking through the logs using `docker logs -f <container-id>`, you will see `Connected to mysql db at host mysql`
+- Connect to the mysql databnase using `docker exec -it <mysql-container-id> mysql -p todos`
+  - You will see the items when you do `select * from todo_items` in the MySQL shell
+
+### Docker Compose
+
+- A tool that helps to define and share multicontainer applications
+- You can create a YAML file to define the services and with a single command, spin everything up or tear it all down
+- With one single file in the root of your project repo, you can define your application stack
+  - Someone would only need to clone your repo and start the compose app
+- Create a `docker-compose.yml` file in the `getting-started/app` directory
+
+```yml
+# Define the list of services (or containers) that you want to run as part of your application
+services:
+  # docker run -dp 127.0.0.1:3000:3000 \
+  #   -w /app -v "$(pwd):/app" \
+  #   --network todo-app \
+  #   -e MYSQL_HOST=mysql \
+  #   -e MYSQL_USER=root \
+  #   -e MYSQL_PASSWORD=secret \
+  #   -e MYSQL_DB=todos \
+  #   node:18-alpine \
+  #   sh -c "yarn install && yarn run dev"
+  # You can pick any name for this service, which will automatically become a network alias
+  # The network alias will be useful when defining the MySQL service
+  app:
+    image: node:18-alpine
+    command: sh -c "yarn install && yarn run dev"
+    # This maps to the -p flag by defining the ports for the service
+    ports:
+      - 127.0.0.1:3000:3000
+    # -w flag
+    working_dir: /app
+    # -v flag
+    # Notice relative paths from the current directory
+    volumes:
+      - ./:/app
+    environment:
+      MYSQL_HOST: mysql
+      MYSQL_USER: root
+      MYSQL_PASSWORD: secret
+      MYSQL_DB: todos
+  # docker run -d \
+  #   --network todo-app --network-alias mysql \
+  #   -v todo-mysql-data:/var/lib/mysql \
+  #   -e MYSQL_ROOT_PASSWORD=secret \
+  #   -e MYSQL_DATABASE=todos \
+  #   mysql:8.0
+  mysql:
+    image: mysql:8.0
+    volumes:
+      - todo-mysql-data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: secret
+      MYSQL_DATABASE: todos
+
+# When doing docker run, the named volume for the MySQL container was created automatically
+# However, this does not ghappen when running with Compose
+# We need to define the volume in the top-level volumes section and then specify the mountpoint in the service config
+# If you simply provide only the volume name here, then the default options are used
+# Other options can be found in https://docs.docker.com/compose/compose-file/07-volumes/
+volumes:
+  todo-mysql-data:
+```
+
+- Run the application stack using `docker compose up -d`, where the `-d` flag will run everything in the background
+  - You can check the logs using `docker compose logs -f`, where the `f` flag "follows" the log, giving you live output as the log is being generated
+  - When you see `Listening on port 3000`, you can then open the app
+- On Docker Dashboard, you will see a group named `app` - the project name is the name of the directory where your `docker-compose.yml` was located in
+  - By clicking the disclose arrow, you can see both containers defined in the compose file
+  - The names of the containers follow the pattern `<service-name>-<replica-number>`
+- To tear down everything, run `docker compose down` or hit the trash can on the Docker Dashboard for the entire app
+  - However, this does not remove named volumes in your compose file; if you want to remove them, then add the `--volumes` flag
+  - The Docker Dashboard will also not remove volumes when you delete the app stack
+
+### Image-building best practices
+
+#### Image layering
+
+- Once a layer changes, all downstream layers have to be recreated as well
+
+```dockerfile
+# syntax=docker/dockerfile:1
+FROM node:18-alpine
+WORKDIR /app
+COPY . .
+RUN yarn install --production
+CMD ["node", "src/index.js"]
+```
+
+- When we made a change to the image, the yarn dependencies had to be reinstalled, since it comes after `COPY . .`
+  - But we should not have to, since these are the same dependencies every time
+- Therefore, to cache the dependencies, we can copy `package.json` in first, then install the dependencies, then copy in everything else
+  - As such, we will only recreate the yarn dependencies if there was a change to `package.json`
+  - Since we usually don't change the dependencies, future builds will be much faster
+- We can update our Dockerfile as such:
+
+```dockerfile
+# syntax=docker/dockerfile:1
+ FROM node:18-alpine
+ WORKDIR /app
+ COPY package.json yarn.lock ./
+ RUN yarn install --production
+ COPY . .
+ CMD ["node", "src/index.js"]
+```
+
+- Create a `.dockerignore` file in the same directory as the Dockerfile as such:
+  - More details here [https://docs.docker.com/engine/reference/builder/#dockerignore-file]
+  - The `node_modules` folder should be omitted in the second `COPY` step because otherwise, it would possibly overwrite files which were created by the command in the `RUN` step before that
+
+```.dockerignore
+node_modules
+```
+
+- We can build a new image with `docker build -t getting-started .`, make a change, build it again, and see that the second build is much faster
+
+#### Multistage builds
+
+- Using multiple stages to create an image
+  - Separate build-time dependencies from runtime dependencies
+  - Reduce overall image size by shipping only what your app needs to run
+- Maven/Tomcat example
+  - When building Java-based applications, a JDK is needed to compile the source code to Java bytecode
+    - But this JDK is not needed in production
+  - You might also be using Maven or Gradle to build the app, which are not needed in the final image
+
+```dockerfile
+# syntax=docker/dockerfile:1
+FROM maven AS build
+WORKDIR /app
+COPY . .
+RUN mvn package
+
+FROM tomcat
+COPY --from=build /app/target/file.war /usr/local/tomcat/webapps
+```
+
+- Explanation
+  - We use one stage (called `build`) to perform the actual Java build using Maven
+  - In the second stage (second `FROM`), we copy in files from the build stage
+  - The final image is only the last stage being created
