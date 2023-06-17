@@ -380,3 +380,12 @@ COPY --from=build /app/target/file.war /usr/local/tomcat/webapps
 ## Building a Java image
 
 Taken from [https://docs.docker.com/language/java/]
+
+## For tfip-miniproject
+
+### Notes
+
+- Currently using the "pre-package, then copy into image" approach
+- Two `application.yml` files for different profiles: one for local development, one for Docker
+- Package with `mvn clean install -Dspring.profiles.active=local`, therefore using the local profile so that tests will pass
+- `docker-compose.yml` has `SPRING_PROFILES_ACTIVE=docker` which will use the `docker` profile, while also passing in 

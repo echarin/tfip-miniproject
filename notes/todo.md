@@ -1,5 +1,14 @@
 # Todo
 
+## Angular
+
+- Saving JWT
+- Dashboard
+- Display budget
+- CRUD category group
+- CRUD category
+- CRUD expense
+
 ## Spring Security
 
 - Selectively secure endpoints based on user credentials

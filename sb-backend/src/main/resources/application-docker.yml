@@ -1,9 +1,10 @@
 spring:
   # Database connection properties
   datasource:
-    url: jdbc:mysql://host.docker.internal:3306/tfip_miniproject
-    username: ${MYSQL_USER:sha2user}
-    password: ${MYSQL_PASSWORD:password}
+    # We may omit any property provided by docker-compose.yml, since it will be overridden
+    # url: jdbc:mysql://host.docker.internal:3306/tfip_miniproject
+    # username: ${MYSQL_USER}
+    # password: ${MYSQL_PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
   # JPA properties
   jpa:
@@ -13,5 +14,5 @@ spring:
     database: mysql
     database-platform: org.hibernate.dialect.MySQLDialect
 
-jwt:
-  signingkey: ${JWT_SIGNINGKEY}
+# jwt:
+  # signingkey: ${JWT_SIGNINGKEY}
