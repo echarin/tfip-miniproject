@@ -8,14 +8,18 @@ import { environment } from 'src/environments/environment';
   providedIn: 'root'
 })
 export class BudgetService {
-  private apiUrl: string = environment.sbApiUrl;
-  private testUserUUID: string = environment.testUserUUID;
+  private apiUrl: string = environment.sbServerUrl + environment.api;
   private jsonHeaders = new HttpHeaders().set('Content-Type', 'application/json');
 
   constructor(private httpClient: HttpClient) { }
 
-  postExpense(expense: any): Observable<Expense> {
-    const url = `${this.apiUrl}/expenses`;
+  getExpenses(userId: string): Observable<Expense[]> {
+    const url = `${this.apiUrl}/${userId}/expenses`;
+    return this.httpClient.get<Expense[]>(url, { headers: this.jsonHeaders });
+  }
+
+  createExpense(expense: Expense, userId: string): Observable<Expense> {
+    const url = `${this.apiUrl}/${userId}/expenses`;
     return this.httpClient.post<Expense>(url, expense, { headers: this.jsonHeaders });
   }
 }

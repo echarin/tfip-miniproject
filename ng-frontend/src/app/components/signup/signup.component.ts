@@ -2,7 +2,8 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Subject } from 'rxjs';
+import { Subject, takeUntil } from 'rxjs';
+import { SignupDTO } from 'src/app/models/dtos';
 import { ErrorService } from 'src/app/services/error.service';
 import { SignupService } from 'src/app/services/signup.service';
 
@@ -36,7 +37,8 @@ export class SignupComponent implements OnInit {
   ngOnInit(): void {
     this.signupForm = this.fb.group({
       email: this.fb.control({value: null, disabled: this.isLoading}, [ Validators.required ]),
-      password: this.fb.control({value: null, disabled: this.isLoading}, [ Validators.required ])
+      password: this.fb.control({value: null, disabled: this.isLoading}, [ Validators.required ]),
+      confirmPassword: this.fb.control({value: null, disabled: this.isLoading}, [ Validators.required ]),
     })
   }
 
@@ -45,8 +47,26 @@ export class SignupComponent implements OnInit {
       this.isLoading = true;
       this.toggleFormControlsState(false);
 
-      
+      if (!this.isPasswordsMatch()) {
+        this.errorMessage = 'passwords do not match';
+        this.isLoading = false;
+        this.toggleFormControlsState(true);
+        return;
+      }
+
+      const signup: SignupDTO = this.signupForm.value;
+      console.log(signup);
+
+      this.suSvc.signup(signup).pipe(takeUntil(this.unsubscribe$)).subscribe({
+        next: (data) => 
+      });
+    } else {
+      this.errorMessage = 'please fill out all required fields.';
     }
+  }
+
+  isPasswordsMatch(): boolean {
+    return this.signupForm.get('password')?.value === this.signupForm.get('confirmPassword')?.value;
   }
 
   switchToLogin() {

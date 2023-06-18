@@ -1,33 +1,33 @@
 <form [formGroup]="expenseForm" (ngSubmit)="onSubmit()">
   <div>
-    <label for="category">Category</label>
+    <label for="category">category</label>
     <select id="category" formControlName="category">
       <option *ngFor="let category of categories" [value]="category.toLowerCase()">{{ category }}</option>
     </select>
     <p *ngIf="expenseForm.get('category')?.hasError('required') && expenseForm.get('category')?.touched">
-      Please specify category.
+      please specify category.
     </p>
   </div>
   <div>
-    <label for="amount">Amount</label>
+    <label for="amount">amount</label>
     <input id="amount" type="number" formControlName="amount">
     <p *ngIf="expenseForm.get('amount')?.hasError('required') && expenseForm.get('amount')?.touched">
-      Please specify amount.
+      please specify amount.
     </p>
   </div>
   <div>
-    <label for="date">Date</label>
+    <label for="date">date</label>
     <input id="date" type="date" formControlName="date">
     <p *ngIf="expenseForm.get('date')?.hasError('required') && expenseForm.get('date')?.touched">
-      Please specify date.
+      please specify date.
     </p>
   </div>
   <div>
-    <label for="description">Description</label>
+    <label for="description">description</label>
     <textarea name="description" id="description" cols="20" rows="5" formControlName="description"></textarea>
   </div>
-  <button type="submit" [disabled]="expenseForm.invalid || isLoading">Add Expense</button>
-  <div *ngIf="isLoading">Submitting...</div>
+  <button type="submit" [disabled]="expenseForm.invalid || isLoading">add</button>
+  <div *ngIf="isLoading">submitting...</div>
   <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
   <div *ngIf="successMessage">{{ successMessage }}</div>
 </form>

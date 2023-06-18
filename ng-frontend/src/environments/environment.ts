@@ -1,5 +1,6 @@
 export const environment = {
     production: false,
-    sbApiUrl: 'http://localhost:8080/api',
-    testUserUUID: '',
+    sbServerUrl: 'http://localhost:8080',
+    api: '/api/v1',
+    auth: '/api/v1/auth'
 };

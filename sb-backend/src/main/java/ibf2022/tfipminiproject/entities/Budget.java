@@ -7,10 +7,12 @@ import java.util.UUID;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -35,19 +37,23 @@ public class Budget extends Auditable {
     @Column(nullable = false, scale = 2)
     private Double moneyPool;
 
+    @ToString.Exclude
+    @OneToOne(mappedBy = "budget", fetch = FetchType.LAZY)
+    private User user;
+
     @OneToMany(mappedBy = "budget", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<CategoryGroup> categoryGroups = new ArrayList<>();
+    private List<Category> categories = new ArrayList<>();
 
     // Helper methods
-    public Budget addCategoryGroup(CategoryGroup categoryGroup) {
-        this.categoryGroups.add(categoryGroup);
-        categoryGroup.setBudget(this);
+    public Budget addCategory(Category category) {
+        this.categories.add(category);
+        category.setBudget(this);
         return this;
     }
 
-    public Budget removeCategoryGroup(CategoryGroup categoryGroup) {
-        this.categoryGroups.remove(categoryGroup);
-        categoryGroup.setBudget(null);
+    public Budget removeCategory(Category category) {
+        this.categories.remove(category);
+        category.setBudget(null);
         return this;
     }
 }

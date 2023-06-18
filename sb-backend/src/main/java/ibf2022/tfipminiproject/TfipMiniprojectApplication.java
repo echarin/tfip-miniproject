@@ -11,11 +11,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import ibf2022.tfipminiproject.entities.Budget;
 import ibf2022.tfipminiproject.entities.Category;
-import ibf2022.tfipminiproject.entities.CategoryGroup;
 import ibf2022.tfipminiproject.entities.Expense;
 import ibf2022.tfipminiproject.entities.User;
 import ibf2022.tfipminiproject.repositories.BudgetRepository;
-import ibf2022.tfipminiproject.repositories.CategoryGroupRepository;
 import ibf2022.tfipminiproject.repositories.CategoryRepository;
 import ibf2022.tfipminiproject.repositories.ExpenseRepository;
 import ibf2022.tfipminiproject.repositories.UserRepository;
@@ -28,7 +26,6 @@ public class TfipMiniprojectApplication implements CommandLineRunner {
 
 	private final ExpenseRepository expenseRepository;
 	private final CategoryRepository categoryRepository;
-	private final CategoryGroupRepository categoryGroupRepository;
 	private final BudgetRepository budgetRepository;
 	private final UserRepository userRepository;
 
@@ -62,15 +59,10 @@ public class TfipMiniprojectApplication implements CommandLineRunner {
 		category.addExpense(expense);
 		categoryRepository.save(category);
 
-		CategoryGroup categoryGroup = new CategoryGroup();
-		categoryGroup.setName("Test category group");
-		categoryGroup.addCategory(category);
-		categoryGroupRepository.save(categoryGroup);
-
 		Budget budget = new Budget();
 		budget.setName("Test's budget");
 		budget.setMoneyPool(500.00);
-		budget.addCategoryGroup(categoryGroup);
+		budget.addCategory(category);
 		budgetRepository.save(budget);
 
 		User user = new User();

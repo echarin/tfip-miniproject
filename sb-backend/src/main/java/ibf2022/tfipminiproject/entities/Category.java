@@ -40,8 +40,8 @@ public class Category extends Auditable {
 
     @ToString.Exclude
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "category_group_id")
-    private CategoryGroup categoryGroup;
+    @JoinColumn(name = "budget_id")
+    private Budget budget;
 
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Expense> expenses = new ArrayList<>();

@@ -56,7 +56,7 @@ export class ExpenseFormComponent implements OnInit {
         error: (err: HttpErrorResponse) => this.handleSubmission(null, err),
       });
     } else {
-      this.errorMessage = 'Please fill out all required fields.';
+      this.errorMessage = 'please fill out all required fields.';
     }
   }
 
@@ -67,7 +67,7 @@ export class ExpenseFormComponent implements OnInit {
 
     if (data) {
       this.expenseForm.reset();
-      this.successMessage = 'Expense successfully submitted!';
+      this.successMessage = 'expense successfully submitted!';
     } else if (error) {
       this.errorMessage = this.errSvc.handleError(error);
     }

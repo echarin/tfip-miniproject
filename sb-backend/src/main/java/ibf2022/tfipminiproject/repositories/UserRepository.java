@@ -12,9 +12,4 @@ public interface UserRepository extends JpaRepository<User, UUID> {
 
     // Custom query: findBy<field_name>
     Optional<User> findByEmail(String email);
-    
-    // To prevent this particular DELETE operation
-    // @Override
-    // @RestResource(exported = false)
-    // void deleteById(UUID id);
 }

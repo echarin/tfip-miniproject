@@ -1,25 +1,25 @@
 <!-- signup.component.html -->
 <div @fadeInOut>
-  <form>
+  <form [formGroup]="signupForm" (ngSubmit)="onSubmit()">
     <div>
       <mat-form-field appearance="fill">
         <mat-label>email</mat-label>
-        <input matInput type="email" id="email" name="email">
+        <input matInput type="email" id="email" formControlName="email">
       </mat-form-field>
     </div>
     <div>
       <mat-form-field appearance="fill">
         <mat-label>password:</mat-label>
-        <input matInput type="password" id="password" name="password">
+        <input matInput type="password" id="password" formControlName="password">
       </mat-form-field>
     </div>
     <div>
       <mat-form-field appearance="fill">
         <mat-label>confirm password:</mat-label>
-        <input matInput type="password" id="confirmPassword" name="confirmPassword">
+        <input matInput type="password" id="confirmPassword" formControlName="confirmPassword">
       </mat-form-field>
     </div>
-    <button mat-raised-button type="submit">login</button>
+    <button mat-raised-button type="submit" [disabled]="signupForm.invalid || isLoading">login</button>
   </form>
   <p>already have an account? <a (click)="switchToLogin()" style="cursor:pointer" mat-button>log in here</a></p>
 </div>

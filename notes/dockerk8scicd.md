@@ -6,7 +6,11 @@
   - It is meant to coordinate clusters of nodes at scale in production in an efficient manner
   - Helps in managing, scaling and ensuring the availability of containerised applications
 - GitHub Actions automates your software workflows, including building, testing and deploying applications
-  - It can be used to automate building the Docker images and deploying them to the chosen PaaS platform
+  - When something happens to or in the repository, you can start an automated workflow in response
+  - For example, in this case:
+    - Build Docker images for your frontend and backend applications
+    - Push the Docker images to a Docker registry
+    - Apply the Kubernetes deployment and service configurations
 
 ## Docker Overview
 
