@@ -11,6 +11,7 @@ import ibf2022.tfipminiproject.dtos.AuthenticationResponse;
 import ibf2022.tfipminiproject.dtos.RegisterRequest;
 import ibf2022.tfipminiproject.entities.Role;
 import ibf2022.tfipminiproject.entities.User;
+import ibf2022.tfipminiproject.exceptions.EmailAlreadyExistsException;
 import ibf2022.tfipminiproject.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 
@@ -24,6 +25,9 @@ public class AuthenticationService {
     private final AuthenticationManager authManager;
 
     public AuthenticationResponse register(RegisterRequest request) {
+        if (userRepository.findByEmail(request.getEmail()).isPresent()) {
+            throw new EmailAlreadyExistsException("Username by that email already exists");
+        }
         User user = User.builder()
             .email(request.getEmail())
             .password(passwordEncoder.encode(request.getPassword()))

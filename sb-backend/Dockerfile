@@ -1,9 +1,3 @@
-# Old Dockerfile
-# FROM eclipse-temurin
-# COPY target/tfip-miniproject-0.0.1-SNAPSHOT.jar tfip-miniproject-0.0.1-SNAPSHOT.jar
-# ENTRYPOINT [ "java", "-jar", "/tfip-miniproject-0.0.1-SNAPSHOT.jar" ] 
-# EXPOSE 8080
-
 # Use Maven for build stage
 FROM maven:3.9.2-eclipse-temurin-20-alpine AS build
 
@@ -32,7 +26,7 @@ FROM eclipse-temurin:20-jdk-alpine
 WORKDIR /app
 
 # Copy the JAR file from the build stage
-# Notice /app/target: This JAR file comes from the build container, not the host machine
+# Notice /app/target: This JAR file comes from the build container, not the host machine (build context)
 COPY --from=build /app/target/tfip-miniproject-0.0.1-SNAPSHOT.jar ./tfip-miniproject-0.0.1-SNAPSHOT.jar
 
 # Specify environment variables required at build time
@@ -49,7 +43,7 @@ ENV SPRING_DATASOURCE_USERNAME=$SPRING_DATASOURCE_USERNAME
 ENV SPRING_DATASOURCE_PASSWORD=$SPRING_DATASOURCE_PASSWORD
 ENV JWT_SIGNINGKEY=$JWT_SIGNINGKEY
 
-# Specify the command to run your application\
+# Specify the command to run your application
 ENTRYPOINT [ "java", "-jar", "./tfip-miniproject-0.0.1-SNAPSHOT.jar" ]
 
 # Expose the application port
