@@ -28,6 +28,12 @@ public class MySqlConfig {
     @Bean
     public DataSource dataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
+        System.out.println(host);
+        System.out.println(port);
+        System.out.println(username);
+        System.out.println(database);
+        System.out.println(password);
+        
         dataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
         dataSource.setUrl("jdbc:mysql://" + host + ":" + port + "/" + database);
         dataSource.setUsername(username);
