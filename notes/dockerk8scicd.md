@@ -450,3 +450,82 @@ ENTRYPOINT [ "java", "-jar", "./tfip-miniproject-0.0.1-SNAPSHOT.jar" ]
 # Expose the application port
 EXPOSE 8080
 ```
+
+## Environment Variables and Secrets
+
+- When deploying applications to K8s, you should use K8s ConfigMaps and Secrets to manage environment variables and secrets
+- For sensitive information, create a K8s Secret e.g. JWT signing key, database credentials
+  - However, for sensitive information, you might want to avoid committing actual secrets to your repo
+  - You can create these resources manually, or automate their creation with a script that pulls from a secure location
+
+```yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: my-secret
+type: Opaque
+data:
+  SPRING_DATASOURCE_USERNAME: base64-encoded-username
+  SPRING_DATASOURCE_PASSWORD: base64-encoded-password
+  JWT_SIGNINGKEY: base64-encoded-key
+
+# Encode secrets with `echo -n 'secret' | base64`
+```
+
+- You might use GitHub Actions and GitHub Secrets to create Kubernetes Secrets, using the `kubectl create secret` command
+  - Define the required secrets under Actions
+
+```yaml
+- name: Create Kubernetes Secret
+  run: |
+    kubectl create secret generic my-secret \
+    --from-literal=SPRING_DATASOURCE_USERNAME=${{ secrets.SPRING_DATASOURCE_USERNAME }} \
+    --from-literal=SPRING_DATASOURCE_PASSWORD=${{ secrets.SPRING_DATASOURCE_PASSWORD }} \
+    --from-literal=JWT_SIGNINGKEY=${{ secrets.JWT_SIGNINGKEY }} \
+    --dry-run=client -o yaml | kubectl apply -f -
+  env:
+    KUBECONFIG: /path/to/k8s/config/file.yaml
+```
+
+- K8s ConfigMap for non-sensitive configurations like `SPRING_PROFILES_ACTIVE`
+
+```yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: my-config
+data:
+  SPRING_PROFILES_ACTIVE: your-profile
+```
+
+- Then modify your K8s Deployment to include these ConfigMaps and Secrets as environment variables
+
+```yaml
+spec:
+  containers:
+  - name: github-actions-gke
+    image: gcr.io/PROJECT_ID/IMAGE:TAG
+    env:
+      - name: SPRING_PROFILES_ACTIVE
+        valueFrom:
+          configMapKeyRef:
+            name: my-config
+            key: SPRING_PROFILES_ACTIVE
+      - name: SPRING_DATASOURCE_USERNAME
+        valueFrom:
+          secretKeyRef:
+            name: my-secret
+            key: SPRING_DATASOURCE_USERNAME
+      - name: SPRING_DATASOURCE_PASSWORD
+        valueFrom:
+          secretKeyRef:
+            name: my-secret
+            key: SPRING_DATASOURCE_PASSWORD
+      - name: JWT_SIGNINGKEY
+        valueFrom:
+          secretKeyRef:
+            name: my-secret
+            key: JWT_SIGNINGKEY
+```
+
+- Afterwards, apply these ConfigMaps and Secrets to your cluster using `kubectl apply -f configmap.yaml` and `kubectl apply -f secret.yaml`

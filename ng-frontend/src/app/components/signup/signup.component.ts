@@ -1,9 +1,10 @@
 // signup.component.ts
 import { animate, state, style, transition, trigger } from '@angular/animations';
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Subject, takeUntil } from 'rxjs';
-import { SignupDTO } from 'src/app/models/dtos';
+import { SignupDTO, SignupResponse } from 'src/app/models/dtos';
 import { ErrorService } from 'src/app/services/error.service';
 import { SignupService } from 'src/app/services/signup.service';
 
@@ -58,10 +59,24 @@ export class SignupComponent implements OnInit {
       console.log(signup);
 
       this.suSvc.signup(signup).pipe(takeUntil(this.unsubscribe$)).subscribe({
-        next: (data) => 
+        next: (data: SignupResponse) => this.handleSubmission(data, null),
+        error: (err: HttpErrorResponse) => this.handleSubmission(null, err),
       });
     } else {
       this.errorMessage = 'please fill out all required fields.';
+    }
+  }
+
+  private handleSubmission(data: SignupResponse | null, error: HttpErrorResponse | null): void {
+    console.log(data || error);
+    this.isLoading = false;
+    this.toggleFormControlsState(true);
+
+    if (data) {
+      this.signupForm.reset();
+      this.successMessage = 'successfully registered!';
+    } else if (error) {
+      this.errorMessage = this.errSvc.handleError(error);
     }
   }
 
