@@ -88,6 +88,4 @@ public class TfipMiniprojectApplication implements CommandLineRunner {
 			userRepository.save(user);
 		}
 	}
-
-	// Test
 }
