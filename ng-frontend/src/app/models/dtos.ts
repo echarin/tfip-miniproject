@@ -1,10 +1,7 @@
+// dtos.ts
 export interface SignupDTO {
   email: string;
   password: string;
-}
-
-export interface SignupResponse {
-  token: string;
 }
 
 export interface LoginDTO {
@@ -12,6 +9,7 @@ export interface LoginDTO {
   password: string;
 }
 
-export interface LoginResponse {
+export interface AuthResponse {
   token: string;
+  expiresAt: number;
 }

@@ -1,7 +1,10 @@
 package ibf2022.tfipminiproject.services;
 
+import java.util.Date;
+
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -13,6 +16,7 @@ import ibf2022.tfipminiproject.entities.Role;
 import ibf2022.tfipminiproject.entities.User;
 import ibf2022.tfipminiproject.exceptions.EmailAlreadyExistsException;
 import ibf2022.tfipminiproject.repositories.UserRepository;
+import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -34,22 +38,24 @@ public class AuthenticationService {
             .role(Role.USER)
             .build();
         userRepository.save(user);
-        String jwtToken = jwtService.generateToken(user);
-        return AuthenticationResponse.builder()
-            .token(jwtToken)
-            .build();
+        return generateAuthenticationResponse(user);
     }
 
-    public AuthenticationResponse authenticate(AuthenticationRequest request) {
+    public AuthenticationResponse authenticate(AuthenticationRequest request) throws AuthenticationException {
         authManager.authenticate(
             new UsernamePasswordAuthenticationToken(
                 request.getEmail(), request.getPassword()
-            )
-        ); // Throws AuthenticationException when authentication fails
+            ));
         User user = userRepository.findByEmail(request.getEmail()).orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        return generateAuthenticationResponse(user);
+    }
+
+    private AuthenticationResponse generateAuthenticationResponse(User user) {
         String jwtToken = jwtService.generateToken(user);
+        Date expiresAt = jwtService.extractClaim(jwtToken, Claims::getExpiration);
         return AuthenticationResponse.builder()
             .token(jwtToken)
+            .expiresAt(expiresAt)
             .build();
     }
 }

@@ -2,9 +2,9 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, Validators } from '@angular/forms';
 import { Subject, takeUntil } from 'rxjs';
-import { SignupDTO, SignupResponse } from 'src/app/models/dtos';
+import { AuthResponse, SignupDTO } from 'src/app/models/dtos';
 import { ErrorService } from 'src/app/services/error.service';
 import { SignupService } from 'src/app/services/signup.service';
 
@@ -40,37 +40,40 @@ export class SignupComponent implements OnInit {
       email: this.fb.control({value: null, disabled: this.isLoading}, [ Validators.required ]),
       password: this.fb.control({value: null, disabled: this.isLoading}, [ Validators.required ]),
       confirmPassword: this.fb.control({value: null, disabled: this.isLoading}, [ Validators.required ]),
-    })
+    }, { validators: [this.passwordMatchValidator] });
+  }
+
+  private passwordMatchValidator(control: AbstractControl): ValidationErrors | null {
+    const password = control.get('password')?.value;
+    const confirmPassword = control.get('confirmPassword')?.value;
+    return password === confirmPassword ? null : { 'mismatch': true };
   }
 
   onSubmit(): void {
     if (this.signupForm.valid) {
-      this.isLoading = true;
-      this.toggleFormControlsState(false);
-
-      if (!this.isPasswordsMatch()) {
-        this.errorMessage = 'passwords do not match';
-        this.isLoading = false;
-        this.toggleFormControlsState(true);
-        return;
-      }
+      this.toggleForm(false);
 
       const signup: SignupDTO = this.signupForm.value;
       console.log(signup);
 
       this.suSvc.signup(signup).pipe(takeUntil(this.unsubscribe$)).subscribe({
-        next: (data: SignupResponse) => this.handleSubmission(data, null),
+        next: (data: AuthResponse) => this.handleSubmission(data, null),
         error: (err: HttpErrorResponse) => this.handleSubmission(null, err),
       });
+    } else if (this.signupForm.hasError('mismatch')) {
+      this.errorMessage = 'passwords do not match';
+      this.toggleForm(true);
+      return;
     } else {
       this.errorMessage = 'please fill out all required fields.';
+      this.toggleForm(true);
+      return;
     }
   }
 
-  private handleSubmission(data: SignupResponse | null, error: HttpErrorResponse | null): void {
+  private handleSubmission(data: AuthResponse | null, error: HttpErrorResponse | null): void {
     console.log(data || error);
-    this.isLoading = false;
-    this.toggleFormControlsState(true);
+    this.toggleForm(true);
 
     if (data) {
       this.signupForm.reset();
@@ -80,17 +83,19 @@ export class SignupComponent implements OnInit {
     }
   }
 
-  isPasswordsMatch(): boolean {
-    return this.signupForm.get('password')?.value === this.signupForm.get('confirmPassword')?.value;
-  }
-
-  switchToLogin() {
-    this.showLoginEvent.emit();
-  }
-
   private toggleFormControlsState(isEnabled: boolean): void {
     const method = isEnabled ? 'enable' : 'disable';
     this.signupForm.get('email')?.[method]();
     this.signupForm.get('password')?.[method]();
+  }
+
+  private toggleForm(isEnabled: boolean): void {
+    const method = isEnabled? true : false;
+    this.isLoading = !method;
+    this.toggleFormControlsState(method);
+  }
+
+  switchToLogin() {
+    this.showLoginEvent.emit();
   }
 }

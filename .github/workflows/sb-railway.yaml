@@ -1,27 +1,27 @@
-name: Deploy Spring Boot backend to Railway
+# name: Deploy Spring Boot backend to Railway
 
-on:
-  push:
-    branches:
-      - main
-    paths:
-      - 'sb-backend/**'
+# on:
+#   push:
+#     branches:
+#       - main
+#     paths:
+#       - 'sb-backend/**'
 
-jobs:
-  deploy:
-    name: Deploy
-    runs-on: ubuntu-latest
+# jobs:
+#   deploy:
+#     name: Deploy
+#     runs-on: ubuntu-latest
 
-    steps:
+#     steps:
 
-      - name: Checkout
-        uses: actions/checkout@v3
+#       - name: Checkout
+#         uses: actions/checkout@v3
       
-      - name: Install Railway
-        run: npm i -g @railway/cli
+#       - name: Install Railway
+#         run: npm i -g @railway/cli
       
-      - name: Deploy to Railway
-        run: railway up
-        working-directory: sb-backend
-        env:
-          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+#       - name: Deploy to Railway
+#         run: railway up
+#         working-directory: sb-backend
+#         env:
+#           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}

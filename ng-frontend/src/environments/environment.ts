@@ -1,3 +1,4 @@
+// environment.ts
 export const environment = {
     production: false,
     sbServerUrl: 'http://localhost:8080',

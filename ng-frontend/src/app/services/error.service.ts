@@ -1,12 +1,14 @@
+// error.service.ts
 import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
 // Define constants for error messages
-export const CLIENT_ERROR_MESSAGE = 'An error occurred: ';
-export const BAD_REQUEST_MESSAGE = 'There was a problem with your request. Please check your input and try again.';
-export const UNAUTHORISED_REQUEST_MESSAGE = 'Unauthorised request. Please login again.';
-export const SERVER_ERROR_MESSAGE = 'There was a problem with the server. Please try again later.';
-export const UNEXPECTED_ERROR_MESSAGE = 'Unexpected error occurred: ';
+export const CLIENT_ERROR_MESSAGE = 'an error occurred: ';
+export const BAD_REQUEST_MESSAGE = 'there was a problem with your request. please try again.';
+export const UNAUTHORISED_REQUEST_MESSAGE = 'incorrect email/password. please try again.';
+export const CONFLICT_MESSAGE = 'a user by that email already exists. please try again.';
+export const SERVER_ERROR_MESSAGE = 'there was a problem with the server. please try again later.';
+export const UNEXPECTED_ERROR_MESSAGE = 'unexpected error occurred: ';
 
 @Injectable({
   providedIn: 'root'
@@ -26,6 +28,8 @@ export class ErrorService {
           return BAD_REQUEST_MESSAGE;
         case 401:
           return UNAUTHORISED_REQUEST_MESSAGE;
+        case 409:
+          return CONFLICT_MESSAGE;
         case 500:
           return SERVER_ERROR_MESSAGE;
         default:

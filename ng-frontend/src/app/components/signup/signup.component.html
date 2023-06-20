@@ -18,8 +18,11 @@
         <mat-label>confirm password:</mat-label>
         <input matInput type="password" id="confirmPassword" formControlName="confirmPassword">
       </mat-form-field>
+      <p *ngIf="signupForm.hasError('mismatch') && (signupForm.get('password')?.touched || signupForm.get('confirmPassword')?.touched)">
+        passwords do not match.
+      </p>
     </div>
-    <button mat-raised-button type="submit" [disabled]="signupForm.invalid || isLoading">login</button>
+    <button mat-raised-button type="submit" [disabled]="signupForm.invalid || isLoading">sign up</button>
   </form>
   <p>already have an account? <a (click)="switchToLogin()" style="cursor:pointer" mat-button>log in here</a></p>
 </div>
