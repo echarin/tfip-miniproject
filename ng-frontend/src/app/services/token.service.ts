@@ -1,4 +1,4 @@
-// auth.service.ts
+// token.service.ts
 import { Injectable } from '@angular/core';
 import { AuthResponse } from '../models/dtos';
 
@@ -35,5 +35,9 @@ export class TokenService {
 
   isTokenExpired(expiresAt: number): boolean {
     return new Date().getTime() > expiresAt;
+  }
+
+  isAuthenticated() {
+    return this.getToken() !== null;
   }
 }
