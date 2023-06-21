@@ -1,13 +1,17 @@
 package ibf2022.tfipminiproject.services;
 
 import java.util.Date;
+import java.util.UUID;
 
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import ibf2022.tfipminiproject.dtos.AuthenticationRequest;
 import ibf2022.tfipminiproject.dtos.AuthenticationResponse;
@@ -27,6 +31,7 @@ public class AuthenticationService {
     private final JwtService jwtService;
     private final AuthenticationManager authManager;
 
+    @Transactional
     public AuthenticationResponse register(AuthenticationRequest request) {
         if (userRepository.findByEmail(request.getEmail()).isPresent()) {
             throw new EmailAlreadyExistsException("Username by that email already exists");
@@ -40,6 +45,7 @@ public class AuthenticationService {
         return generateAuthenticationResponse(user);
     }
 
+    @Transactional
     public AuthenticationResponse authenticate(AuthenticationRequest request) throws AuthenticationException {
         authManager.authenticate(
             new UsernamePasswordAuthenticationToken(
@@ -57,5 +63,10 @@ public class AuthenticationService {
             .token(jwtToken)
             .expiresAt(expiresAtMillis)
             .build();
+    }
+
+    public boolean doesUserIdMatch(UUID userId, Authentication auth) {
+        UserDetails userDetails = (UserDetails) auth.getPrincipal();
+        return userDetails.getUsername().equals(userId.toString());
     }
 }

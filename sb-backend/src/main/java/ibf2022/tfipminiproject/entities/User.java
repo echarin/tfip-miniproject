@@ -55,7 +55,7 @@ public class User extends Auditable implements UserDetails {
 
     // The user owns this relationship
     // Operations that happen to the user will cascade to the budget
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "budget_id", referencedColumnName = "id")
     private Budget budget;
 

@@ -1,5 +1,6 @@
 package ibf2022.tfipminiproject.entities;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.UUID;
 
@@ -30,7 +31,7 @@ public class Expense extends Auditable {
     private UUID id;
 
     @Column(nullable = false, scale = 2)
-    private Double amount;
+    private BigDecimal amount;
 
     @Column(nullable = false)
     private LocalDate date;

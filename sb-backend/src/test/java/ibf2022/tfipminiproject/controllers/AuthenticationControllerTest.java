@@ -20,7 +20,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import ibf2022.tfipminiproject.dtos.AuthenticationRequest;
 import ibf2022.tfipminiproject.dtos.AuthenticationResponse;
-import ibf2022.tfipminiproject.dtos.RegisterRequest;
 import ibf2022.tfipminiproject.exceptions.EmailAlreadyExistsException;
 import ibf2022.tfipminiproject.services.AuthenticationService;
 
@@ -43,14 +42,14 @@ public class AuthenticationControllerTest {
     
     @Test
     public void registerUserSuccess() throws Exception {
-        RegisterRequest request = new RegisterRequest();
+        AuthenticationRequest request = new AuthenticationRequest();
         request.setEmail("test@test.com");
         request.setPassword("password");
 
         AuthenticationResponse response = new AuthenticationResponse();
         response.setToken("token");
 
-        Mockito.when(authService.register(Mockito.any(RegisterRequest.class))).thenReturn(response);
+        Mockito.when(authService.register(Mockito.any(AuthenticationRequest.class))).thenReturn(response);
 
         mockMvc.perform(post("/api/v1/auth/register")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -60,11 +59,11 @@ public class AuthenticationControllerTest {
 
     @Test
     public void registerUserEmailExists() throws Exception {
-        RegisterRequest request = new RegisterRequest();
+        AuthenticationRequest request = new AuthenticationRequest();
         request.setEmail("test@test.com");
         request.setPassword("password");
 
-        Mockito.when(authService.register(Mockito.any(RegisterRequest.class)))
+        Mockito.when(authService.register(Mockito.any(AuthenticationRequest.class)))
                 .thenThrow(new EmailAlreadyExistsException("Email already exists"));
 
         mockMvc.perform(post("/api/v1/auth/register")

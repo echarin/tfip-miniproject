@@ -1,5 +1,6 @@
 package ibf2022.tfipminiproject.entities;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -36,7 +37,7 @@ public class Category extends Auditable {
     private String name;
 
     @Column(nullable = false, scale = 2)
-    private Double budgetedAmount;
+    private BigDecimal budgetedAmount;
 
     @ToString.Exclude
     @ManyToOne(fetch = FetchType.LAZY)

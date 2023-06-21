@@ -1,5 +1,6 @@
 package ibf2022.tfipminiproject;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.UUID;
 
@@ -49,19 +50,19 @@ public class TfipMiniprojectApplication implements CommandLineRunner {
 
 	public void createUserWithEverything() {
 		Expense expense = new Expense();
-		expense.setAmount(30.00);
+		expense.setAmount(BigDecimal.valueOf(100));
 		expense.setDate(LocalDate.now());
 		expenseRepository.save(expense);
 
 		Category category = new Category();
 		category.setName("Test category");
-		category.setBudgetedAmount(300.00);
+		category.setBudgetedAmount(BigDecimal.valueOf(100));
 		category.addExpense(expense);
 		categoryRepository.save(category);
 
 		Budget budget = new Budget();
 		budget.setName("Test's budget");
-		budget.setMoneyPool(500.00);
+		budget.setMoneyPool(BigDecimal.valueOf(500));
 		budget.addCategory(category);
 		budgetRepository.save(budget);
 
