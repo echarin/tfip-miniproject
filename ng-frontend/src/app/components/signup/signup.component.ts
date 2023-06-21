@@ -4,9 +4,9 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, Validators } from '@angular/forms';
 import { Subject, takeUntil } from 'rxjs';
-import { AuthResponse, SignupDTO } from 'src/app/models/dtos';
+import { AuthResponse, AuthDTO } from 'src/app/models/dtos';
+import { AuthService } from 'src/app/services/auth.service';
 import { ErrorService } from 'src/app/services/error.service';
-import { SignupService } from 'src/app/services/signup.service';
 
 @Component({
   selector: 'app-signup',
@@ -31,7 +31,7 @@ export class SignupComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    private suSvc: SignupService,
+    private authSvc: AuthService,
     private errSvc: ErrorService,
   ) { }
 
@@ -53,10 +53,10 @@ export class SignupComponent implements OnInit {
     if (this.signupForm.valid) {
       this.toggleForm(false);
 
-      const signup: SignupDTO = this.signupForm.value;
+      const signup: AuthDTO = this.signupForm.value;
       console.log(signup);
 
-      this.suSvc.signup(signup).pipe(takeUntil(this.unsubscribe$)).subscribe({
+      this.authSvc.signup(signup).pipe(takeUntil(this.unsubscribe$)).subscribe({
         next: (data: AuthResponse) => this.handleSubmission(data, null),
         error: (err: HttpErrorResponse) => this.handleSubmission(null, err),
       });

@@ -1,10 +1,5 @@
 // dtos.ts
-export interface SignupDTO {
-  email: string;
-  password: string;
-}
-
-export interface LoginDTO {
+export interface AuthDTO {
   email: string;
   password: string;
 }

@@ -1,15 +1,26 @@
 // auth.service.ts
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { AuthResponse } from '../models/dtos';
+import { Observable } from 'rxjs';
+import { environment } from 'src/environments/environment';
+import { AuthResponse, AuthDTO } from '../models/dtos';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  constructor() { }
+  private authUrl: string = environment.sbServerUrl + environment.auth;
+  private jsonHeaders = new HttpHeaders().set('Content-Type', 'application/json');
 
-  storeToken(authResponse: AuthResponse) {
-    localStorage.setItem('token', authResponse.token);
-    localStorage.setItem('expiresAt', String(authResponse.expiresAt));
+  constructor(private httpClient: HttpClient) { }
+
+  signup(signup: AuthDTO): Observable<AuthResponse> {
+    const url = `${this.authUrl}/register`;
+    return this.httpClient.post<AuthResponse>(url, signup, { headers: this.jsonHeaders });
+  }
+
+  login(login: AuthDTO): Observable<AuthResponse> {
+    const url = `${this.authUrl}/authenticate`;
+    return this.httpClient.post<AuthResponse>(url, login, { headers: this.jsonHeaders });
   }
 }
