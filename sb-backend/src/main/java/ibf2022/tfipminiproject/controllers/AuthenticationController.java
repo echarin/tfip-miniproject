@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import ibf2022.tfipminiproject.dtos.AuthenticationRequest;
 import ibf2022.tfipminiproject.dtos.AuthenticationResponse;
-import ibf2022.tfipminiproject.dtos.RegisterRequest;
 import ibf2022.tfipminiproject.exceptions.EmailAlreadyExistsException;
 import ibf2022.tfipminiproject.services.AuthenticationService;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +22,7 @@ public class AuthenticationController {
     private final AuthenticationService authService;
     
     @PostMapping("/register")
-    public ResponseEntity<AuthenticationResponse> register(@RequestBody RegisterRequest request) throws EmailAlreadyExistsException {
+    public ResponseEntity<AuthenticationResponse> register(@RequestBody AuthenticationRequest request) throws EmailAlreadyExistsException {
         return ResponseEntity.ok(authService.register(request));
     }
 

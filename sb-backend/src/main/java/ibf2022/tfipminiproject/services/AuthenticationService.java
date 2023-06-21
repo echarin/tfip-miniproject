@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 
 import ibf2022.tfipminiproject.dtos.AuthenticationRequest;
 import ibf2022.tfipminiproject.dtos.AuthenticationResponse;
-import ibf2022.tfipminiproject.dtos.RegisterRequest;
 import ibf2022.tfipminiproject.entities.Role;
 import ibf2022.tfipminiproject.entities.User;
 import ibf2022.tfipminiproject.exceptions.EmailAlreadyExistsException;
@@ -28,7 +27,7 @@ public class AuthenticationService {
     private final JwtService jwtService;
     private final AuthenticationManager authManager;
 
-    public AuthenticationResponse register(RegisterRequest request) {
+    public AuthenticationResponse register(AuthenticationRequest request) {
         if (userRepository.findByEmail(request.getEmail()).isPresent()) {
             throw new EmailAlreadyExistsException("Username by that email already exists");
         }
@@ -53,9 +52,10 @@ public class AuthenticationService {
     private AuthenticationResponse generateAuthenticationResponse(User user) {
         String jwtToken = jwtService.generateToken(user);
         Date expiresAt = jwtService.extractClaim(jwtToken, Claims::getExpiration);
+        long expiresAtMillis = expiresAt.getTime();
         return AuthenticationResponse.builder()
             .token(jwtToken)
-            .expiresAt(expiresAt)
+            .expiresAt(expiresAtMillis)
             .build();
     }
 }
