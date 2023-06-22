@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import ibf2022.tfipminiproject.dtos.BudgetDTO;
 import ibf2022.tfipminiproject.dtos.ResponseDTO;
-import ibf2022.tfipminiproject.entities.Budget;
 import ibf2022.tfipminiproject.exceptions.ResourceNotFoundException;
 import ibf2022.tfipminiproject.services.AuthenticationService;
 import ibf2022.tfipminiproject.services.BudgetService;
@@ -29,7 +28,7 @@ public class BudgetController {
     private final BudgetService budgetService;
     
     @GetMapping("/{userId}/budget")
-    public ResponseEntity<Budget> getBudget(
+    public ResponseEntity<BudgetDTO> getBudget(
         @PathVariable("userId") UUID userId,
         Authentication auth
     ) {
@@ -37,12 +36,12 @@ public class BudgetController {
             throw new AccessDeniedException("You do not have access to this resource.");
         }
 
-        Budget budget = budgetService.findByUser(userId);
-        return ResponseEntity.ok(budget);
+        BudgetDTO budgetResponse = budgetService.findByUser(userId);
+        return ResponseEntity.ok(budgetResponse);
     }
 
     @PostMapping("/{userId}/budget")
-    public ResponseEntity<Budget> createBudget(
+    public ResponseEntity<BudgetDTO> createBudget(
         @PathVariable("userId") UUID userId,
         Authentication auth,
         BudgetDTO budgetDTO
@@ -51,8 +50,8 @@ public class BudgetController {
             throw new AccessDeniedException("You do not have access to this resource.");
         }
 
-        Budget budget = budgetService.save(userId, budgetDTO);
-        return ResponseEntity.ok(budget);
+        BudgetDTO budgetResponse = budgetService.save(userId, budgetDTO);
+        return ResponseEntity.ok(budgetResponse);
     }
 
     @DeleteMapping("/{userId}/budget/{budgetId}")

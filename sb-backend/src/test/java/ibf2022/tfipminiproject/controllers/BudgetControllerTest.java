@@ -24,7 +24,6 @@ import org.springframework.web.context.WebApplicationContext;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import ibf2022.tfipminiproject.dtos.BudgetDTO;
-import ibf2022.tfipminiproject.entities.Budget;
 import ibf2022.tfipminiproject.services.AuthenticationService;
 import ibf2022.tfipminiproject.services.BudgetService;
 
@@ -52,10 +51,10 @@ public class BudgetControllerTest {
     @WithMockUser(username = "test@test.com", password = "password", authorities = { "ROLE_USER" })
     public void getBudgetSuccess() throws Exception {
         UUID userId = UUID.randomUUID();
-        Budget budget = new Budget();
+        BudgetDTO budgetDTO = new BudgetDTO();
         
         when(authService.doesUserIdMatch(any(), any())).thenReturn(true);
-        when(budgetService.findByUser(any())).thenReturn(budget);
+        when(budgetService.findByUser(any())).thenReturn(budgetDTO);
 
         mockMvc.perform(get("/api/v1/" + userId + "/budget")
                 .contentType(MediaType.APPLICATION_JSON))
@@ -81,7 +80,7 @@ public class BudgetControllerTest {
         BudgetDTO budgetDTO = new BudgetDTO();
 
         when(authService.doesUserIdMatch(any(), any())).thenReturn(true);
-        when(budgetService.save(any(), any())).thenReturn(new Budget());
+        when(budgetService.save(any(), any())).thenReturn(new BudgetDTO());
 
         mockMvc.perform(post("/api/v1/" + userId + "/budget")
                 .contentType(MediaType.APPLICATION_JSON)
