@@ -1,5 +1,6 @@
 package ibf2022.tfipminiproject.controllers;
 
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.http.ResponseEntity;
@@ -13,23 +14,22 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import ibf2022.tfipminiproject.dtos.BudgetDTO;
+import ibf2022.tfipminiproject.dtos.ExpenseDTO;
 import ibf2022.tfipminiproject.dtos.ResponseDTO;
-import ibf2022.tfipminiproject.exceptions.ResourceNotFoundException;
 import ibf2022.tfipminiproject.services.AuthenticationService;
-import ibf2022.tfipminiproject.services.BudgetService;
+import ibf2022.tfipminiproject.services.ExpenseService;
 import lombok.RequiredArgsConstructor;
 
 @Controller
 @RequestMapping("/api/v1")
 @RequiredArgsConstructor
-public class BudgetController {
-
-    private final AuthenticationService authService;
-    private final BudgetService budgetService;
+public class ExpenseController {
     
-    @GetMapping("/{userId}/budget")
-    public ResponseEntity<BudgetDTO> getBudget(
+    private final AuthenticationService authService;
+    private final ExpenseService expenseService;
+
+    @GetMapping("/{userId}/expenses")
+    public ResponseEntity<List<ExpenseDTO>> getAllExpensesByUser(
         @PathVariable("userId") UUID userId,
         Authentication auth
     ) {
@@ -37,36 +37,37 @@ public class BudgetController {
             throw new AccessDeniedException("You do not have access to this resource.");
         }
 
-        BudgetDTO budgetResponse = budgetService.findByUser(userId);
-        return ResponseEntity.ok(budgetResponse);
+        List<ExpenseDTO> expensesResponse = expenseService.getAllExpensesByUser(userId);
+        return ResponseEntity.ok(expensesResponse);
     }
 
-    @PostMapping("/{userId}/budget")
-    public ResponseEntity<BudgetDTO> createBudget(
+    @PostMapping("/{userId}/{categoryId}/expenses")
+    public ResponseEntity<ExpenseDTO> createExpense(
         @PathVariable("userId") UUID userId,
-        @RequestBody BudgetDTO budgetDTO,
+        @PathVariable("categoryId") UUID categoryId,
+        @RequestBody ExpenseDTO expenseDTO,
         Authentication auth
     ) {
         if (!authService.doesUserIdMatch(userId, auth)) {
             throw new AccessDeniedException("You do not have access to this resource.");
         }
 
-        BudgetDTO budgetResponse = budgetService.save(userId, budgetDTO);
-        return ResponseEntity.ok(budgetResponse);
+        ExpenseDTO expenseResponse = expenseService.save(categoryId, expenseDTO);
+        return ResponseEntity.ok(expenseResponse);
     }
 
-    @DeleteMapping("/{userId}/budget/{budgetId}")
-    public ResponseEntity<ResponseDTO> deleteBudget(
+    @DeleteMapping("/{userId}/expenses/{expenseId}")
+    public ResponseEntity<ResponseDTO> deleteCategory(
         @PathVariable("userId") UUID userId,
-        @PathVariable("budgetId") UUID budgetId,
+        @PathVariable("expenseId") UUID expenseId,
         Authentication auth
-    ) throws ResourceNotFoundException {
+    ) {
         if (!authService.doesUserIdMatch(userId, auth)) {
             throw new AccessDeniedException("You do not have access to this resource.");
         }
 
-        budgetService.delete(budgetId);
-        ResponseDTO response = new ResponseDTO("Budget successfully deleted");
+        expenseService.delete(expenseId);
+        ResponseDTO response = new ResponseDTO("Expense successfully deleted");
         return ResponseEntity.ok(response);
     }
 }

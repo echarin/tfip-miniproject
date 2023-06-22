@@ -30,4 +30,9 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleResourceNotFoundException(ResourceNotFoundException e) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse(e.getMessage()));
     }
+
+    @ExceptionHandler(EntityProcessingException.class)
+    public ResponseEntity<ErrorResponse> handleEntityProcessingException(EntityProcessingException e) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorResponse(e.getMessage()));
+    }
 }
