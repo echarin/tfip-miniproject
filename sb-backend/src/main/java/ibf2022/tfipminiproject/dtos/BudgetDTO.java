@@ -1,6 +1,7 @@
 package ibf2022.tfipminiproject.dtos;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 import lombok.AllArgsConstructor;
@@ -16,4 +17,5 @@ public class BudgetDTO {
     private UUID id;
     private String name;
     private BigDecimal moneyPool;
+    private LocalDateTime createdAt;
 }

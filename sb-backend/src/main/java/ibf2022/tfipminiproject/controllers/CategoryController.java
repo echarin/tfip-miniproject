@@ -30,9 +30,8 @@
 //             throw new AccessDeniedException("You do not have access to this resource.");
 //         }
 
-//         List<Category> categories = categoryService.getAllCategoriesByUser(userId);
-//         List<CategoryDTO> categoriesDTO = // TODO
+//         List<CategoryDTO> categoriesResponse = categoryService.getAllCategoriesByUser(userId);
 
-//         return ResponseEntity.ok(categoriesDTO);
+//         return ResponseEntity.ok(categoriesResponse);
 //     }
 // }
