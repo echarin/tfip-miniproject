@@ -25,7 +25,7 @@ public class BudgetService {
     
     public BudgetDTO findByUser(UUID userId) {
         User user = userRepository.findById(userId).orElseThrow(() -> new UsernameNotFoundException("User not found"));
-        Budget budget = budgetRepository.findByUser(user).get();
+        Budget budget = budgetRepository.findByUser(user).orElseThrow(() -> new BudgetNotFoundException("Budget not found"));
         return budgetMapper.budgetToBudgetDTO(budget);
     }
 
@@ -37,7 +37,9 @@ public class BudgetService {
         budget.setMoneyPool(budgetDTO.getMoneyPool());
         user.setBudget(budget);
         userRepository.save(user);
-        Budget savedBudget = budgetRepository.findByUser(user).get(); // Fetch the saved budget from the database
+
+        // Fetch the saved budget from the database
+        Budget savedBudget = budgetRepository.findByUser(user).orElseThrow(() -> new BudgetNotFoundException("Budget not found"));
         return budgetMapper.budgetToBudgetDTO(savedBudget);
     }
 
