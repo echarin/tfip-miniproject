@@ -6,6 +6,7 @@ import { Injectable } from '@angular/core';
 export const CLIENT_ERROR_MESSAGE = 'an error occurred: ';
 export const BAD_REQUEST_MESSAGE = 'there was a problem with your request. please try again.';
 export const UNAUTHORISED_REQUEST_MESSAGE = 'incorrect email/password. please try again.';
+export const NOT_FOUND_MESSAGE = 'the requested resource could not be found.';
 export const CONFLICT_MESSAGE = 'a user by that email already exists. please try again.';
 export const SERVER_ERROR_MESSAGE = 'there was a problem with the server. please try again later.';
 export const UNEXPECTED_ERROR_MESSAGE = 'unexpected error occurred: ';
@@ -28,6 +29,8 @@ export class ErrorService {
           return BAD_REQUEST_MESSAGE;
         case 401:
           return UNAUTHORISED_REQUEST_MESSAGE;
+        case 404:
+          return NOT_FOUND_MESSAGE;
         case 409:
           return CONFLICT_MESSAGE;
         case 500:
