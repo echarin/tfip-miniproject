@@ -60,6 +60,7 @@ public class AuthenticationService {
         Date expiresAt = jwtService.extractClaim(jwtToken, Claims::getExpiration);
         long expiresAtMillis = expiresAt.getTime();
         return AuthenticationResponse.builder()
+            .userId(user.getId())
             .token(jwtToken)
             .expiresAt(expiresAtMillis)
             .build();
