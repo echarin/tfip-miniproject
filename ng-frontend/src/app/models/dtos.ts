@@ -1,10 +1,11 @@
 // dtos.ts
-export interface AuthDTO {
+export interface AuthRequest {
   email: string;
   password: string;
 }
 
 export interface AuthResponse {
+  userId: string;
   token: string;
   expiresAt: number;
 }

@@ -3,7 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { AuthResponse, AuthDTO } from '../models/dtos';
+import { AuthResponse, AuthRequest } from '../models/dtos';
 
 @Injectable({
   providedIn: 'root'
@@ -14,12 +14,12 @@ export class AuthService {
 
   constructor(private httpClient: HttpClient) { }
 
-  signup(signup: AuthDTO): Observable<AuthResponse> {
+  signup(signup: AuthRequest): Observable<AuthResponse> {
     const url = `${this.authUrl}/register`;
     return this.httpClient.post<AuthResponse>(url, signup, { headers: this.jsonHeaders });
   }
 
-  login(login: AuthDTO): Observable<AuthResponse> {
+  login(login: AuthRequest): Observable<AuthResponse> {
     const url = `${this.authUrl}/authenticate`;
     return this.httpClient.post<AuthResponse>(url, login, { headers: this.jsonHeaders });
   }
