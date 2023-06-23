@@ -26,6 +26,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class CategoryController {
     
+    // test
     private final AuthenticationService authService;
     private final CategoryService categoryService;
 
