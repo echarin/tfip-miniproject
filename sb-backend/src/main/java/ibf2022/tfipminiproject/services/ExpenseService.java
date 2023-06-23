@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -60,8 +61,19 @@ public class ExpenseService {
     }
 
     @Transactional
-    public void delete(UUID expenseId) {
-        Expense expense = expenseRepository.findById(expenseId).orElseThrow(() -> new ResourceNotFoundException("Expense not found"));
+    public void delete(UUID userId, UUID expenseId) {
+        Expense expense = expenseRepository.findById(expenseId)
+            .orElseThrow(() -> new ResourceNotFoundException("Expense not found"));
+
+        User user = userRepository.findById(userId)
+            .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        
+        boolean userOwnsExpense = expenseRepository.existsByUserAndId(user, expenseId);
+
+        if (!userOwnsExpense) {
+            throw new AccessDeniedException("You do not have access to this resource.");
+        }
+        
         Category category = expense.getCategory();
         category.removeExpense(expense);
         categoryRepository.save(category);

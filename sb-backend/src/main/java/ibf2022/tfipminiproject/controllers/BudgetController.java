@@ -2,16 +2,17 @@ package ibf2022.tfipminiproject.controllers;
 
 import java.util.UUID;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import ibf2022.tfipminiproject.dtos.BudgetDTO;
 import ibf2022.tfipminiproject.dtos.ResponseDTO;
@@ -20,7 +21,7 @@ import ibf2022.tfipminiproject.services.AuthenticationService;
 import ibf2022.tfipminiproject.services.BudgetService;
 import lombok.RequiredArgsConstructor;
 
-@Controller
+@RestController
 @RequestMapping("/api/v1")
 @RequiredArgsConstructor
 public class BudgetController {
@@ -52,7 +53,7 @@ public class BudgetController {
         }
 
         BudgetDTO budgetResponse = budgetService.save(userId, budgetDTO);
-        return ResponseEntity.ok(budgetResponse);
+        return ResponseEntity.status(HttpStatus.CREATED).body(budgetResponse);
     }
 
     @DeleteMapping("/{userId}/budget/{budgetId}")

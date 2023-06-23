@@ -13,4 +13,6 @@ import ibf2022.tfipminiproject.entities.User;
 public interface ExpenseRepository extends JpaRepository<Expense, UUID> {
     @Query("SELECT e FROM Expense e WHERE e.category.budget.user = :user")
     List<Expense> findAllByUser(@Param("user") User user);
+
+    boolean existsByUserAndId(User user, UUID expenseId);
 }
