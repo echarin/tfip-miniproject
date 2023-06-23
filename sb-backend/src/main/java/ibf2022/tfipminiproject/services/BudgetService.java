@@ -2,6 +2,7 @@ package ibf2022.tfipminiproject.services;
 
 import java.util.UUID;
 
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,24 +32,38 @@ public class BudgetService {
 
     @Transactional
     public BudgetDTO save(UUID userId, BudgetDTO budgetDTO) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        User user = userRepository.findById(userId)
+            .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
         Budget budget = budgetMapper.budgetDTOToBudget(budgetDTO);
         user.setBudget(budget);
         userRepository.save(user);
 
         // Fetch the saved budget from the database
-        Budget savedBudget = budgetRepository.findByUser(user).orElseThrow(() -> new ResourceNotFoundException("Budget not found"));
+        Budget savedBudget = budgetRepository.findByUser(user)
+            .orElseThrow(() -> new ResourceNotFoundException("Budget not found"));
         return budgetMapper.budgetToBudgetDTO(savedBudget);
     }
 
     @Transactional
-    public void delete(UUID budgetId) {
-        Budget budget = budgetRepository.findById(budgetId).orElseThrow(() -> new ResourceNotFoundException("Budget not found"));
-        User user = budget.getUser();
+    public void delete(UUID userId, UUID budgetId) {
+        // Check if user exists
+        User user = userRepository.findById(userId)
+            .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
+        // Then check if budget exists
+        if (budgetRepository.findById(budgetId).isEmpty()) {
+            throw new ResourceNotFoundException("Budget not found");
+        }
+
+        boolean userOwnsBudget = budgetRepository.existsByUserAndId(user, budgetId);
+
+        if (!userOwnsBudget) {
+            throw new AccessDeniedException("You do not have access to this resource.");
+        }
+        
         user.setBudget(null);
         userRepository.save(user); 
-        // Since we have orphan removal = true, 
-        // saving the user should be enough to delete the budget
-        // budgetRepository.delete(budget);
+        // orphanRemoval = true
     } 
 }

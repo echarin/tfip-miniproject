@@ -9,7 +9,6 @@ import ibf2022.tfipminiproject.entities.User;
 
 
 public interface UserRepository extends JpaRepository<User, UUID> {
-
     // Custom query: findBy<field_name>
     Optional<User> findByEmail(String email);
 }

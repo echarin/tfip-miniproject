@@ -1,9 +1,10 @@
 package ibf2022.tfipminiproject.services;
 
-import java.util.List;
+import java.time.LocalDate;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -19,7 +20,6 @@ import ibf2022.tfipminiproject.mappers.ExpenseMapper;
 import ibf2022.tfipminiproject.repositories.CategoryRepository;
 import ibf2022.tfipminiproject.repositories.ExpenseRepository;
 import ibf2022.tfipminiproject.repositories.UserRepository;
-import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -30,25 +30,35 @@ public class ExpenseService {
     private final CategoryRepository categoryRepository;
     private final ExpenseRepository expenseRepository;
     private final ExpenseMapper expenseMapper;
-    private final EntityManager entityManager;
     
-    public List<ExpenseDTO> getAllExpensesByUser(UUID userId) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new UsernameNotFoundException("User not found"));
-        List<Expense> expenses = expenseRepository.findAllByUser(user);
-        return expenses.stream()
-                .map(expenseMapper::expenseToExpenseDTO)
-                .collect(Collectors.toList());
+    public Page<ExpenseDTO> getAllExpensesByUser(
+        UUID userId, LocalDate from, LocalDate to, Pageable pageable
+    ) {
+        User user = userRepository.findById(userId)
+            .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        Page<Expense> expenses = expenseRepository.findAllByUserAndDateBetween(user, from, to, pageable);
+        return expenses.map(expenseMapper::expenseToExpenseDTO);
     }
 
     @Transactional
-    public ExpenseDTO save(UUID categoryId, ExpenseDTO expenseDTO) {
-        Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException("Category not found"));
-        Expense expense = expenseMapper.expenseDTOToExpense(expenseDTO);
+    public ExpenseDTO save(UUID userId, UUID categoryId, ExpenseDTO expenseDTO) {
+        User user = userRepository.findById(userId)
+            .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
+        Category category = categoryRepository.findById(categoryId)
+            .orElseThrow(() -> new ResourceNotFoundException("Category not found"));
+
+        boolean userOwnsCategory = categoryRepository.existsByUserAndId(user, categoryId);
+
+        if (!userOwnsCategory) {
+            throw new AccessDeniedException("You do not have access to this resource.");
+        }
+        
+        Expense expense = expenseMapper.expenseDTOToExpense(expenseDTO);
         category.addExpense(expense);
         categoryRepository.save(category);
-        entityManager.flush();
-        entityManager.refresh(category);
+        // You do not need to flush and refresh the category
+        // Since you are using CascadeType.ALL
 
         // Hibernate should also update the ID in the expense entity
         UUID expenseId = expense.getId();
@@ -62,9 +72,6 @@ public class ExpenseService {
 
     @Transactional
     public void delete(UUID userId, UUID expenseId) {
-        Expense expense = expenseRepository.findById(expenseId)
-            .orElseThrow(() -> new ResourceNotFoundException("Expense not found"));
-
         User user = userRepository.findById(userId)
             .orElseThrow(() -> new UsernameNotFoundException("User not found"));
         
@@ -73,11 +80,13 @@ public class ExpenseService {
         if (!userOwnsExpense) {
             throw new AccessDeniedException("You do not have access to this resource.");
         }
+
+        Expense expense = expenseRepository.findById(expenseId)
+            .orElseThrow(() -> new ResourceNotFoundException("Expense not found"));
         
         Category category = expense.getCategory();
         category.removeExpense(expense);
         categoryRepository.save(category);
-        // Since we have orphan removal = true, 
-        // saving the budget should be enough to delete the category
+        // orphanRemoval = true
     } 
 }

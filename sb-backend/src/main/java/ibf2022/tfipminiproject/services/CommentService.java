@@ -31,7 +31,16 @@ public class CommentService {
                 .map(commentMapper::commentToCommentDTO);
     }
 
-    public CommentDTO save(CommentDTO comment) {
+    public CommentDTO save(UUID userId, UUID expenseId, CommentDTO comment) {
+        User user = userRepository.findById(userId)
+            .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+
+        boolean userOwnsExpense = expenseRepository.existsByUserAndId(user, expenseId);
+
+        if (!userOwnsExpense) {
+            throw new AccessDeniedException("You do not have access to this resource.");
+        }
+        
         Comment savedComment = commentRepository.save(commentMapper.commentDTOToComment(comment));
         return commentMapper.commentToCommentDTO(savedComment);
     }
@@ -39,7 +48,7 @@ public class CommentService {
     public void delete(UUID userId, String commentId) {
         Comment comment = commentRepository.findById(commentId)
             .orElseThrow(() -> new ResourceNotFoundException("Comment not found"));
-        
+
         User user = userRepository.findById(userId)
             .orElseThrow(() -> new ResourceNotFoundException("User not found"));
         

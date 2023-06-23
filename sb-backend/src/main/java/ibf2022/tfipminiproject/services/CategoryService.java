@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,7 +19,6 @@ import ibf2022.tfipminiproject.mappers.CategoryMapper;
 import ibf2022.tfipminiproject.repositories.BudgetRepository;
 import ibf2022.tfipminiproject.repositories.CategoryRepository;
 import ibf2022.tfipminiproject.repositories.UserRepository;
-import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -29,7 +29,6 @@ public class CategoryService {
     private final BudgetRepository budgetRepository;
     private final CategoryRepository categoryRepository;
     private final CategoryMapper categoryMapper;
-    private final EntityManager entityManager;
     
     public List<CategoryDTO> getAllCategoriesByUser(UUID userId) {
         User user = userRepository.findById(userId).orElseThrow(() -> new UsernameNotFoundException("User not found"));
@@ -40,14 +39,22 @@ public class CategoryService {
     }
 
     @Transactional
-    public CategoryDTO save(UUID budgetId, CategoryDTO categoryDTO) {
-        Budget budget = budgetRepository.findById(budgetId).orElseThrow(() -> new ResourceNotFoundException("Budget not found"));
-        Category category = categoryMapper.categoryDTOToCategory(categoryDTO);
+    public CategoryDTO save(UUID userId, UUID budgetId, CategoryDTO categoryDTO) {
+        User user = userRepository.findById(userId)
+            .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
+        Budget budget = budgetRepository.findById(budgetId)
+            .orElseThrow(() -> new ResourceNotFoundException("Budget not found"));
+
+        boolean userOwnsBudget = budgetRepository.existsByUserAndId(user, budgetId);
+
+        if (!userOwnsBudget) {
+            throw new AccessDeniedException("You do not have access to this resource.");
+        }
+
+        Category category = categoryMapper.categoryDTOToCategory(categoryDTO);
         budget.addCategory(category);
         budgetRepository.save(budget);
-        entityManager.flush();
-        entityManager.refresh(budget);
 
         // Hibernate should also update the ID in the category entity
         UUID categoryId = category.getId();
@@ -60,12 +67,22 @@ public class CategoryService {
     }
 
     @Transactional
-    public void delete(UUID categoryId) {
-        Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException("Category not found"));
+    public void delete(UUID userId, UUID categoryId) {
+        User user = userRepository.findById(userId)
+            .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
+        boolean userOwnsCategory = categoryRepository.existsByUserAndId(user, categoryId);
+
+        if (!userOwnsCategory) {
+            throw new AccessDeniedException("You do not have access to this resource.");
+        }
+
+        Category category = categoryRepository.findById(categoryId)
+            .orElseThrow(() -> new ResourceNotFoundException("Category not found"));
+
         Budget budget = category.getBudget();
         budget.removeCategory(category);
         budgetRepository.save(budget);
-        // Since we have orphan removal = true, 
-        // saving the budget should be enough to delete the category
+        // orphanRemoval = true
     } 
 }

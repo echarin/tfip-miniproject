@@ -53,7 +53,7 @@ public class CategoryController {
             throw new AccessDeniedException("You do not have access to this resource.");
         }
 
-        CategoryDTO categoryResponse = categoryService.save(budgetId, categoryDTO);
+        CategoryDTO categoryResponse = categoryService.save(userId, budgetId, categoryDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(categoryResponse);
     }
 
@@ -67,7 +67,7 @@ public class CategoryController {
             throw new AccessDeniedException("You do not have access to this resource.");
         }
 
-        categoryService.delete(categoryId);
+        categoryService.delete(userId, categoryId);
         ResponseDTO response = new ResponseDTO("Category successfully deleted");
         return ResponseEntity.ok(response);
     }

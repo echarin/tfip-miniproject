@@ -13,4 +13,11 @@ import ibf2022.tfipminiproject.entities.User;
 public interface CategoryRepository extends JpaRepository<Category, UUID> {
     @Query("SELECT c FROM Category c WHERE c.budget.user = :user")
     List<Category> findAllByUser(@Param("user") User user);
+
+    @Query("""
+        SELECT CASE WHEN COUNT(c) > 0 THEN true ELSE false END
+        FROM Category c
+        WHERE c.budget.user = :user AND c.id = :categoryId
+            """)
+    boolean existsByUserAndId(User user, UUID categoryId);
 }

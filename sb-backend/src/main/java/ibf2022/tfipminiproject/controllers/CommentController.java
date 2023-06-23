@@ -60,7 +60,7 @@ public class CommentController {
             throw new AccessDeniedException("You do not have access to this resource.");
         }
 
-        CommentDTO commentResponse = commentService.save(comment);
+        CommentDTO commentResponse = commentService.save(userId, expenseId, comment);
         return ResponseEntity.status(HttpStatus.CREATED).body(commentResponse);
     }
 

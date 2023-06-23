@@ -1,7 +1,7 @@
 package ibf2022.tfipminiproject.services;
 
-import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -15,10 +15,13 @@ import org.mockito.InjectMocks;
 import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import ibf2022.tfipminiproject.dtos.BudgetDTO;
 import ibf2022.tfipminiproject.entities.Budget;
 import ibf2022.tfipminiproject.entities.User;
+import ibf2022.tfipminiproject.exceptions.ResourceNotFoundException;
 import ibf2022.tfipminiproject.mappers.BudgetMapper;
 import ibf2022.tfipminiproject.repositories.BudgetRepository;
 import ibf2022.tfipminiproject.repositories.UserRepository;
@@ -100,18 +103,69 @@ public class BudgetServiceTest {
     }
 
     @Test
-    public void testDelete() {
+    public void testDeleteUserNotFound() {
+        UUID userId = UUID.randomUUID();
         UUID budgetId = UUID.randomUUID();
-        Budget budget = new Budget();
+
+        when(userRepository.findById(userId)).thenReturn(Optional.empty());
+
+        assertThrows(UsernameNotFoundException.class, () -> budgetService.delete(userId, budgetId));
+
+        verify(userRepository).findById(userId);
+    }
+
+    @Test
+    public void testDeleteBudgetNotFound() {
+        UUID userId = UUID.randomUUID();
+        UUID budgetId = UUID.randomUUID();
+
         User user = new User();
-        budget.setUser(user);
 
-        when(budgetRepository.findById(budgetId)).thenReturn(Optional.of(budget));
+        when(userRepository.findById(userId)).thenReturn(Optional.of(user));
+        when(budgetRepository.findById(budgetId)).thenReturn(Optional.empty());
 
-        budgetService.delete(budgetId);
+        assertThrows(ResourceNotFoundException.class, () -> budgetService.delete(userId, budgetId));
 
-        assertNull(user.getBudget());
+        verify(userRepository).findById(userId);
         verify(budgetRepository).findById(budgetId);
+    }
+
+    @Test
+    public void testDeleteNotOwner() {
+        UUID userId = UUID.randomUUID();
+        UUID budgetId = UUID.randomUUID();
+
+        User user = new User();
+        Budget budget = new Budget();
+
+        when(userRepository.findById(userId)).thenReturn(Optional.of(user));
+        when(budgetRepository.findById(budgetId)).thenReturn(Optional.of(budget));
+        when(budgetRepository.existsByUserAndId(user, budgetId)).thenReturn(false);
+
+        assertThrows(AccessDeniedException.class, () -> budgetService.delete(userId, budgetId));
+
+        verify(userRepository).findById(userId);
+        verify(budgetRepository).findById(budgetId);
+        verify(budgetRepository).existsByUserAndId(user, budgetId);
+    }
+
+    @Test
+    public void testDeleteSuccess() {
+        UUID userId = UUID.randomUUID();
+        UUID budgetId = UUID.randomUUID();
+
+        User user = new User();
+        Budget budget = new Budget();
+
+        when(userRepository.findById(userId)).thenReturn(Optional.of(user));
+        when(budgetRepository.findById(budgetId)).thenReturn(Optional.of(budget));
+        when(budgetRepository.existsByUserAndId(user, budgetId)).thenReturn(true);
+
+        budgetService.delete(userId, budgetId);
+
+        verify(userRepository).findById(userId);
+        verify(budgetRepository).findById(budgetId);
+        verify(budgetRepository).existsByUserAndId(user, budgetId);
         verify(userRepository).save(user);
     }
 }

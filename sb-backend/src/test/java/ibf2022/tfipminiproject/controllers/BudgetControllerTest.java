@@ -85,7 +85,7 @@ public class BudgetControllerTest {
         mockMvc.perform(post("/api/v1/" + userId + "/budget")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(asJsonString(budgetDTO)))
-                .andExpect(status().isOk());
+                .andExpect(status().isCreated());
     }
 
     @Test

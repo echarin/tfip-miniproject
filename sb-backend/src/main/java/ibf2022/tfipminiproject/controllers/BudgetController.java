@@ -66,7 +66,7 @@ public class BudgetController {
             throw new AccessDeniedException("You do not have access to this resource.");
         }
 
-        budgetService.delete(budgetId);
+        budgetService.delete(userId, budgetId);
         ResponseDTO response = new ResponseDTO("Budget successfully deleted");
         return ResponseEntity.ok(response);
     }
