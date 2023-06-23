@@ -36,3 +36,5 @@ jobs:
 
       - name: Test with Maven
         run: mvn -B test --file sb-backend/pom.xml
+        env:
+          JWT_SIGNINGKEY: ${{ secrets.JWT_SIGNINGKEY }}

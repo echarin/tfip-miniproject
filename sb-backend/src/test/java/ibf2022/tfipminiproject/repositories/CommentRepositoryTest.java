@@ -20,7 +20,7 @@ public class CommentRepositoryTest {
     @Autowired
     private CommentRepository commentRepository;
 
-    // Currently does not work in GitHub Actions
+    // Currently does not work in GitHub Actions;
     // @Test
     // public void testFindByExpenseId() {
     //     Comment comment = new Comment();
