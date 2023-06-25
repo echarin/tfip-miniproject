@@ -44,6 +44,7 @@ public class User extends Auditable implements UserDetails {
     private String email;
 
     @Column(nullable = false)
+    @ToString.Exclude
     private String password;
 
     @Enumerated(EnumType.STRING)
@@ -53,6 +54,7 @@ public class User extends Auditable implements UserDetails {
     // Operations that happen to the user will cascade to the budget
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "budget_id", referencedColumnName = "id")
+    @ToString.Exclude
     private Budget budget;
 
     @Override

@@ -36,8 +36,6 @@ public class Expense extends Auditable {
     @Column(nullable = false)
     private LocalDate date;
 
-    private String description;
-
     @ToString.Exclude
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id")

@@ -44,6 +44,7 @@ public class Category extends Auditable {
     @JoinColumn(name = "budget_id")
     private Budget budget;
 
+    @ToString.Exclude
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Expense> expenses = new ArrayList<>();
 

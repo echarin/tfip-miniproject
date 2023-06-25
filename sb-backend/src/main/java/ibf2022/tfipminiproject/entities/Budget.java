@@ -42,6 +42,7 @@ public class Budget extends Auditable {
     @OneToOne(mappedBy = "budget", fetch = FetchType.LAZY)
     private User user;
 
+    @ToString.Exclude
     @OneToMany(mappedBy = "budget", cascade = CascadeType.ALL, orphanRemoval = true)
     private final List<Category> categories = new ArrayList<>();
 

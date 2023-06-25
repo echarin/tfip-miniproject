@@ -7,7 +7,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -30,6 +29,8 @@ public class AuthenticationService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authManager;
+    
+    // private Logger logger = Logger.getLogger(AuthenticationService.class.getName());
 
     @Transactional
     public AuthenticationResponse register(AuthenticationRequest request) {
@@ -67,7 +68,7 @@ public class AuthenticationService {
     }
 
     public boolean doesUserIdMatch(UUID userId, Authentication auth) {
-        UserDetails userDetails = (UserDetails) auth.getPrincipal();
-        return userDetails.getUsername().equals(userId.toString());
+        User authUser = (User) auth.getPrincipal();
+        return authUser.getId().equals(userId);
     }
 }
