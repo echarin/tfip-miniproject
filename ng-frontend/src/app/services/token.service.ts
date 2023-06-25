@@ -1,6 +1,6 @@
 // token.service.ts
 import { Injectable } from '@angular/core';
-import { AuthResponse } from '../models/dtos';
+import { AuthResponse } from '../models/auth-dtos';
 
 @Injectable({
   providedIn: 'root'

@@ -3,7 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { AuthResponse, AuthRequest } from '../models/dtos';
+import { AuthResponse, AuthRequest } from '../models/auth-dtos';
 
 @Injectable({
   providedIn: 'root'

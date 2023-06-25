@@ -1,10 +1,13 @@
+// expense-form.component.ts
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Subject, takeUntil } from 'rxjs';
-import { Expense } from 'src/app/models/models';
-import { BudgetService } from 'src/app/services/budget.service';
+import { AuthResponse } from 'src/app/models/auth-dtos';
+import { Expense } from 'src/app/models/entities';
 import { ErrorService } from 'src/app/services/error.service';
+import { RequestService } from 'src/app/services/request.service';
+import { TokenService } from 'src/app/services/token.service';
 
 @Component({
   selector: 'app-expense-form',
@@ -12,6 +15,8 @@ import { ErrorService } from 'src/app/services/error.service';
   styleUrls: ['./expense-form.component.css']
 })
 export class ExpenseFormComponent implements OnInit {
+  authDetails!: AuthResponse;
+
   expenseForm!: FormGroup;
   categories: string[] = [];
   isLoading: boolean = false;
@@ -21,8 +26,9 @@ export class ExpenseFormComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder, 
-    private bSvc: BudgetService,
-    private errSvc: ErrorService
+    private reqSvc: RequestService,
+    private errSvc: ErrorService,
+    private tokenSvc: TokenService,
   ) { }
 
   ngOnInit(): void {
@@ -33,6 +39,7 @@ export class ExpenseFormComponent implements OnInit {
       description: this.fb.control({value: null, disabled: this.isLoading})
     });
 
+    this.tokenSvc.getAuth();
     this.fetchCategories();
   }
 
@@ -48,10 +55,14 @@ export class ExpenseFormComponent implements OnInit {
       this.isLoading = true;
       this.toggleFormControlsState(false);
 
+      // How do you get category ID from the category?
+
       const expense: Expense = this.expenseForm.value;
       console.log(expense);
 
-      this.bSvc.postExpense(expense).pipe(takeUntil(this.unsubscribe$)).subscribe({
+      const userId: string = this.authDetails.userId;
+
+      this.reqSvc.createExpense(userId, categoryId, expense).pipe(takeUntil(this.unsubscribe$)).subscribe({
         next: (data) => this.handleSubmission(data, null),
         error: (err: HttpErrorResponse) => this.handleSubmission(null, err),
       });

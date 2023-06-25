@@ -1,5 +1,7 @@
+// environment.development.ts
 export const environment = {
-    production: true,
-    sbApiUrl: 'http://localhost:8080/api',
-    testUserUUID: 'b2344fdb-397f-4754-a46a-943845432214',
+    production: false,
+    sbServerUrl: 'http://localhost:8080',
+    api: '/api/v1',
+    auth: '/api/v1/auth'
 };

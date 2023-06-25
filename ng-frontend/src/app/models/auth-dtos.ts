@@ -1,4 +1,4 @@
-// dtos.ts
+// auth-dtos.ts
 export interface AuthRequest {
   email: string;
   password: string;

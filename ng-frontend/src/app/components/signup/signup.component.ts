@@ -4,7 +4,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, Validators } from '@angular/forms';
 import { Subject, takeUntil } from 'rxjs';
-import { AuthResponse, AuthDTO } from 'src/app/models/dtos';
+import { AuthRequest, AuthResponse } from 'src/app/models/auth-dtos';
 import { AuthService } from 'src/app/services/auth.service';
 import { ErrorService } from 'src/app/services/error.service';
 
@@ -53,7 +53,7 @@ export class SignupComponent implements OnInit {
     if (this.signupForm.valid) {
       this.toggleForm(false);
 
-      const signup: AuthDTO = this.signupForm.value;
+      const signup: AuthRequest = this.signupForm.value;
       console.log(signup);
 
       this.authSvc.signup(signup).pipe(takeUntil(this.unsubscribe$)).subscribe({
