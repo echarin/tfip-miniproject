@@ -1,7 +1,9 @@
 package ibf2022.tfipminiproject.services;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -40,6 +42,26 @@ public class ExpenseService {
         return expenses.map(expenseMapper::expenseToExpenseDTO);
     }
 
+    public List<ExpenseDTO> getAllExpensesByCategory(UUID userId, UUID categoryId) {
+        User user = userRepository.findById(userId)
+            .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        
+        Category category = categoryRepository.findById(categoryId)
+            .orElseThrow(() -> new ResourceNotFoundException("Category not found"));
+        
+        boolean userOwnsCategory = categoryRepository.existsByUserAndId(user, categoryId);
+
+        if (!userOwnsCategory) {
+            throw new AccessDeniedException("You do not have access to this resource.");
+        }
+
+        List<Expense> expenses = expenseRepository.findAllByCategory(category);
+        return expenses
+                .stream()
+                .map(expenseMapper::expenseToExpenseDTO)
+                .collect(Collectors.toList());
+    } 
+
     @Transactional
     public ExpenseDTO save(UUID userId, UUID categoryId, ExpenseDTO expenseDTO) {
         User user = userRepository.findById(userId)
@@ -57,16 +79,13 @@ public class ExpenseService {
         Expense expense = expenseMapper.expenseDTOToExpense(expenseDTO);
         category.addExpense(expense);
         categoryRepository.save(category);
-        // You do not need to flush and refresh the category
-        // Since you are using CascadeType.ALL
 
-        // Hibernate should also update the ID in the expense entity
-        UUID expenseId = expense.getId();
+        Expense savedExpense = category.getExpenses().get(category.getExpenses().size() - 1);
+        UUID expenseId = savedExpense.getId();
         if (expenseId == null) {
             throw new EntityProcessingException("Expense ID not generated after save");
         }
 
-        Expense savedExpense = expenseRepository.findById(expenseId).orElseThrow(() -> new ResourceNotFoundException("Expense not found"));
         return expenseMapper.expenseToExpenseDTO(savedExpense);
     }
 
@@ -88,5 +107,5 @@ public class ExpenseService {
         category.removeExpense(expense);
         categoryRepository.save(category);
         // orphanRemoval = true
-    } 
+    }
 }

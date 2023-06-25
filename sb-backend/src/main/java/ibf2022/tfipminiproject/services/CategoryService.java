@@ -2,7 +2,6 @@ package ibf2022.tfipminiproject.services;
 
 import java.util.List;
 import java.util.UUID;
-import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 import org.springframework.security.access.AccessDeniedException;
@@ -20,7 +19,6 @@ import ibf2022.tfipminiproject.mappers.CategoryMapper;
 import ibf2022.tfipminiproject.repositories.BudgetRepository;
 import ibf2022.tfipminiproject.repositories.CategoryRepository;
 import ibf2022.tfipminiproject.repositories.UserRepository;
-import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -31,8 +29,7 @@ public class CategoryService {
     private final BudgetRepository budgetRepository;
     private final CategoryRepository categoryRepository;
     private final CategoryMapper categoryMapper;
-    private final EntityManager entityManager;
-    private Logger logger = Logger.getLogger(CategoryService.class.getName());
+    // private Logger logger = Logger.getLogger(CategoryService.class.getName());
     
     public List<CategoryDTO> getAllCategoriesByUser(UUID userId) {
         User user = userRepository.findById(userId).orElseThrow(() -> new UsernameNotFoundException("User not found"));
@@ -59,8 +56,6 @@ public class CategoryService {
         Category category = categoryMapper.categoryDTOToCategory(categoryDTO);
         budget.addCategory(category);
         budgetRepository.save(budget);
-        // entityManager.flush();
-        // entityManager.refresh(budget); 
 
         Category savedCategory = budget.getCategories().get(budget.getCategories().size() - 1);
         UUID categoryId = savedCategory.getId();

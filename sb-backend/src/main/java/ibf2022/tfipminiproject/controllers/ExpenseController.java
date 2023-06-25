@@ -1,6 +1,7 @@
 package ibf2022.tfipminiproject.controllers;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.data.domain.Page;
@@ -51,6 +52,20 @@ public class ExpenseController {
 
         Pageable pageable = PageRequest.of(page, size);
         Page<ExpenseDTO> expensesResponse = expenseService.getAllExpensesByUser(userId, from, to, pageable);
+        return ResponseEntity.ok(expensesResponse);
+    }
+
+    @GetMapping("/{userId}/{categoryId}/expenses")
+    public ResponseEntity<List<ExpenseDTO>> getAllExpensesByCategory(
+        @PathVariable("userId") UUID userId,
+        @PathVariable("categoryId") UUID categoryId,
+        Authentication auth
+    ) {
+        if (!authService.doesUserIdMatch(userId, auth)) {
+            throw new AccessDeniedException("You do not have access to this resource.");
+        }
+
+        List<ExpenseDTO> expensesResponse = expenseService.getAllExpensesByCategory(userId, categoryId);
         return ResponseEntity.ok(expensesResponse);
     }
 
