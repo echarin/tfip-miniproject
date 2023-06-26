@@ -1,12 +1,14 @@
 package ibf2022.tfipminiproject.repositories;
 
-import ibf2022.tfipminiproject.entities.Budget;
-import ibf2022.tfipminiproject.entities.Category;
-import ibf2022.tfipminiproject.entities.User;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
+
+import ibf2022.tfipminiproject.sqlentities.Budget;
+import ibf2022.tfipminiproject.sqlentities.Category;
+import ibf2022.tfipminiproject.sqlentities.User;
+import ibf2022.tfipminiproject.sqlrepositories.CategoryRepository;
 
 import java.math.BigDecimal;
 import java.util.List;

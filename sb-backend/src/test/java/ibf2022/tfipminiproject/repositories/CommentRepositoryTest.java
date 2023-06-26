@@ -12,7 +12,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
-import ibf2022.tfipminiproject.entities.Comment;
+import ibf2022.tfipminiproject.mongoentities.Comment;
+import ibf2022.tfipminiproject.mongorepos.CommentRepository;
 
 @SpringBootTest
 public class CommentRepositoryTest {

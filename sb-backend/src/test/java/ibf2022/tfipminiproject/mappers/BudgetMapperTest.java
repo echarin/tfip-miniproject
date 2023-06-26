@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import ibf2022.tfipminiproject.dtos.BudgetDTO;
-import ibf2022.tfipminiproject.entities.Budget;
+import ibf2022.tfipminiproject.sqlentities.Budget;
 
 @SpringBootTest
 public class BudgetMapperTest {

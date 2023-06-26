@@ -8,13 +8,13 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 
 import ibf2022.tfipminiproject.dtos.CommentDTO;
-import ibf2022.tfipminiproject.entities.Comment;
-import ibf2022.tfipminiproject.entities.User;
 import ibf2022.tfipminiproject.exceptions.ResourceNotFoundException;
 import ibf2022.tfipminiproject.mappers.CommentMapper;
-import ibf2022.tfipminiproject.repositories.CommentRepository;
-import ibf2022.tfipminiproject.repositories.ExpenseRepository;
-import ibf2022.tfipminiproject.repositories.UserRepository;
+import ibf2022.tfipminiproject.mongoentities.Comment;
+import ibf2022.tfipminiproject.mongorepos.CommentRepository;
+import ibf2022.tfipminiproject.sqlentities.User;
+import ibf2022.tfipminiproject.sqlrepositories.ExpenseRepository;
+import ibf2022.tfipminiproject.sqlrepositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 
 @Service

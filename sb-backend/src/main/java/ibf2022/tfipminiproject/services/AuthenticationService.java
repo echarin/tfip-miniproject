@@ -14,10 +14,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import ibf2022.tfipminiproject.dtos.AuthenticationRequest;
 import ibf2022.tfipminiproject.dtos.AuthenticationResponse;
-import ibf2022.tfipminiproject.entities.Role;
-import ibf2022.tfipminiproject.entities.User;
 import ibf2022.tfipminiproject.exceptions.EmailAlreadyExistsException;
-import ibf2022.tfipminiproject.repositories.UserRepository;
+import ibf2022.tfipminiproject.sqlentities.Role;
+import ibf2022.tfipminiproject.sqlentities.User;
+import ibf2022.tfipminiproject.sqlrepositories.UserRepository;
 import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 

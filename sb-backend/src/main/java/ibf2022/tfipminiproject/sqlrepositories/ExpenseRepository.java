@@ -1,4 +1,4 @@
-package ibf2022.tfipminiproject.repositories;
+package ibf2022.tfipminiproject.sqlrepositories;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -10,9 +10,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import ibf2022.tfipminiproject.entities.Category;
-import ibf2022.tfipminiproject.entities.Expense;
-import ibf2022.tfipminiproject.entities.User;
+import ibf2022.tfipminiproject.sqlentities.Category;
+import ibf2022.tfipminiproject.sqlentities.Expense;
+import ibf2022.tfipminiproject.sqlentities.User;
 
 public interface ExpenseRepository extends JpaRepository<Expense, UUID> {
     @Query("""

@@ -1,4 +1,4 @@
-package ibf2022.tfipminiproject.entities;
+package ibf2022.tfipminiproject.sqlentities;
 
 import java.util.Collection;
 import java.util.List;

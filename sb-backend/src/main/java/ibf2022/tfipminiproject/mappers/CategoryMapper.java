@@ -4,7 +4,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
 import ibf2022.tfipminiproject.dtos.CategoryDTO;
-import ibf2022.tfipminiproject.entities.Category;
+import ibf2022.tfipminiproject.sqlentities.Category;
 
 @Mapper(componentModel = "spring")
 public interface CategoryMapper {

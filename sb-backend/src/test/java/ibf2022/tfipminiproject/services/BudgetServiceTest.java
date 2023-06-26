@@ -19,12 +19,12 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import ibf2022.tfipminiproject.dtos.BudgetDTO;
-import ibf2022.tfipminiproject.entities.Budget;
-import ibf2022.tfipminiproject.entities.User;
 import ibf2022.tfipminiproject.exceptions.ResourceNotFoundException;
 import ibf2022.tfipminiproject.mappers.BudgetMapper;
-import ibf2022.tfipminiproject.repositories.BudgetRepository;
-import ibf2022.tfipminiproject.repositories.UserRepository;
+import ibf2022.tfipminiproject.sqlentities.Budget;
+import ibf2022.tfipminiproject.sqlentities.User;
+import ibf2022.tfipminiproject.sqlrepositories.BudgetRepository;
+import ibf2022.tfipminiproject.sqlrepositories.UserRepository;
 
 @SpringBootTest
 public class BudgetServiceTest {

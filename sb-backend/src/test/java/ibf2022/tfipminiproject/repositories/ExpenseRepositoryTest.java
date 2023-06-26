@@ -9,10 +9,12 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 
-import ibf2022.tfipminiproject.entities.Budget;
-import ibf2022.tfipminiproject.entities.Category;
-import ibf2022.tfipminiproject.entities.Expense;
-import ibf2022.tfipminiproject.entities.User;
+import ibf2022.tfipminiproject.sqlentities.Budget;
+import ibf2022.tfipminiproject.sqlentities.Category;
+import ibf2022.tfipminiproject.sqlentities.Expense;
+import ibf2022.tfipminiproject.sqlentities.User;
+import ibf2022.tfipminiproject.sqlrepositories.ExpenseRepository;
+
 import java.math.BigDecimal;
 
 import static org.assertj.core.api.Assertions.assertThat;

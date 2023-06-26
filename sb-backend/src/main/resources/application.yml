@@ -1,17 +1,19 @@
 spring:
   # Database connection properties
   datasource:
-    url: jdbc:mysql://localhost:3306/tfip_miniproject
+    url: ${MYSQL_URL}
+    # url: jdbc:mysql://localhost:3306/tfip_miniproject
     username: ${MYSQL_USER}
     password: ${MYSQL_PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
   data:
     mongodb:
-      uri: mongodb://${MONGO_USER:myUser}:${MONGO_PASSWORD:myPassword}@${MONGO_HOST:127.0.0.1}:${MONGO_PORT:27017}/${MONGO_DB:tfip_miniproject}?authSource=admin
+      uri: ${MONGODB_URI}
+      # uri: mongodb://${MONGO_USER:myUser}:${MONGO_PASSWORD:myPassword}@${MONGO_HOST:127.0.0.1}:${MONGO_PORT:27017}/${MONGO_DB:tfip_miniproject}?authSource=admin
   # JPA properties
   jpa:
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: update
     show-sql: true
     database: mysql
     database-platform: org.hibernate.dialect.MySQLDialect

@@ -1,4 +1,4 @@
-package ibf2022.tfipminiproject.entities;
+package ibf2022.tfipminiproject.mongoentities;
 
 import java.util.UUID;
 

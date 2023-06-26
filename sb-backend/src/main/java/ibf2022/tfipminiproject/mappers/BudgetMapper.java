@@ -4,7 +4,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
 import ibf2022.tfipminiproject.dtos.BudgetDTO;
-import ibf2022.tfipminiproject.entities.Budget;
+import ibf2022.tfipminiproject.sqlentities.Budget;
 
 @Mapper(componentModel = "spring")
 public interface BudgetMapper {

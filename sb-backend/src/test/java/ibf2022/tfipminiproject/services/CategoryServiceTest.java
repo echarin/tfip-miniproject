@@ -22,15 +22,15 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import ibf2022.tfipminiproject.dtos.CategoryDTO;
-import ibf2022.tfipminiproject.entities.Budget;
-import ibf2022.tfipminiproject.entities.Category;
-import ibf2022.tfipminiproject.entities.User;
 import ibf2022.tfipminiproject.exceptions.EntityProcessingException;
 import ibf2022.tfipminiproject.exceptions.ResourceNotFoundException;
 import ibf2022.tfipminiproject.mappers.CategoryMapper;
-import ibf2022.tfipminiproject.repositories.BudgetRepository;
-import ibf2022.tfipminiproject.repositories.CategoryRepository;
-import ibf2022.tfipminiproject.repositories.UserRepository;
+import ibf2022.tfipminiproject.sqlentities.Budget;
+import ibf2022.tfipminiproject.sqlentities.Category;
+import ibf2022.tfipminiproject.sqlentities.User;
+import ibf2022.tfipminiproject.sqlrepositories.BudgetRepository;
+import ibf2022.tfipminiproject.sqlrepositories.CategoryRepository;
+import ibf2022.tfipminiproject.sqlrepositories.UserRepository;
 import jakarta.persistence.EntityManager;
 
 @SpringBootTest

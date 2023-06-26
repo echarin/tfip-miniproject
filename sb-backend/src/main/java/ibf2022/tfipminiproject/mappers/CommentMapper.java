@@ -3,7 +3,7 @@ package ibf2022.tfipminiproject.mappers;
 import org.mapstruct.Mapper;
 
 import ibf2022.tfipminiproject.dtos.CommentDTO;
-import ibf2022.tfipminiproject.entities.Comment;
+import ibf2022.tfipminiproject.mongoentities.Comment;
 
 @Mapper(componentModel = "spring")
 public interface CommentMapper {

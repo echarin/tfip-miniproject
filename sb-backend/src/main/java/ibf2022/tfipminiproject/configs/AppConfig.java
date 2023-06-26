@@ -11,7 +11,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import ibf2022.tfipminiproject.repositories.UserRepository;
+import ibf2022.tfipminiproject.sqlrepositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 
 @Configuration

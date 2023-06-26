@@ -10,8 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 
-import ibf2022.tfipminiproject.entities.Role;
-import ibf2022.tfipminiproject.entities.User;
+import ibf2022.tfipminiproject.sqlentities.Role;
+import ibf2022.tfipminiproject.sqlentities.User;
+import ibf2022.tfipminiproject.sqlrepositories.UserRepository;
 
 @DataJpaTest
 public class UserRepositoryTest {

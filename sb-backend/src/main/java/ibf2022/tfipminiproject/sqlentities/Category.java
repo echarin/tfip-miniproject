@@ -1,4 +1,4 @@
-package ibf2022.tfipminiproject.entities;
+package ibf2022.tfipminiproject.sqlentities;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -12,8 +12,9 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -26,7 +27,7 @@ import lombok.ToString;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-public class Budget extends Auditable {
+public class Category extends Auditable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -36,26 +37,27 @@ public class Budget extends Auditable {
     private String name;
 
     @Column(nullable = false, scale = 2)
-    private BigDecimal moneyPool;
+    private BigDecimal budgetedAmount;
 
     @ToString.Exclude
-    @OneToOne(mappedBy = "budget", fetch = FetchType.LAZY)
-    private User user;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "budget_id")
+    private Budget budget;
 
     @ToString.Exclude
-    @OneToMany(mappedBy = "budget", cascade = CascadeType.ALL, orphanRemoval = true)
-    private final List<Category> categories = new ArrayList<>();
+    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Expense> expenses = new ArrayList<>();
 
     // Helper methods
-    public Budget addCategory(Category category) {
-        this.categories.add(category);
-        category.setBudget(this);
+    public Category addExpense(Expense expense) {
+        this.expenses.add(expense);
+        expense.setCategory(this);
         return this;
     }
 
-    public Budget removeCategory(Category category) {
-        this.categories.remove(category);
-        category.setBudget(null);
+    public Category removeExpense(Expense expense) {
+        this.expenses.remove(expense);
+        expense.setCategory(null);
         return this;
     }
 }

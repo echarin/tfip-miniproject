@@ -10,14 +10,14 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.transaction.annotation.Transactional;
 
-import ibf2022.tfipminiproject.entities.Budget;
-import ibf2022.tfipminiproject.entities.Category;
-import ibf2022.tfipminiproject.entities.Expense;
-import ibf2022.tfipminiproject.entities.User;
-import ibf2022.tfipminiproject.repositories.BudgetRepository;
-import ibf2022.tfipminiproject.repositories.CategoryRepository;
-import ibf2022.tfipminiproject.repositories.ExpenseRepository;
-import ibf2022.tfipminiproject.repositories.UserRepository;
+import ibf2022.tfipminiproject.sqlentities.Budget;
+import ibf2022.tfipminiproject.sqlentities.Category;
+import ibf2022.tfipminiproject.sqlentities.Expense;
+import ibf2022.tfipminiproject.sqlentities.User;
+import ibf2022.tfipminiproject.sqlrepositories.BudgetRepository;
+import ibf2022.tfipminiproject.sqlrepositories.CategoryRepository;
+import ibf2022.tfipminiproject.sqlrepositories.ExpenseRepository;
+import ibf2022.tfipminiproject.sqlrepositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 
 @SpringBootApplication
