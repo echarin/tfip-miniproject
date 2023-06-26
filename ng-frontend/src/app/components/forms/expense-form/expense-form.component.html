@@ -1,0 +1,36 @@
+<!-- expense-form.component.html -->
+<form [formGroup]="expenseForm" (ngSubmit)="onSubmit()">
+  <div>
+    <mat-form-field appearance="fill">
+      <mat-label>category</mat-label>
+      <mat-select id="category" formControlName="category">
+        <mat-option *ngFor="let category of categories" [value]="category.id">{{ category.name }}</mat-option>
+      </mat-select>
+      <mat-error *ngIf="expenseForm.get('category')?.invalid && expenseForm.get('category')?.touched">
+        please specify category.
+      </mat-error>
+    </mat-form-field>
+  </div>
+  <div>
+    <mat-form-field appearance="fill">
+      <mat-label>amount</mat-label>
+      <input matInput id="amount" type="number" formControlName="amount">
+      <mat-error *ngIf="expenseForm.get('amount')?.invalid && expenseForm.get('amount')?.touched">
+        please specify amount.
+      </mat-error>
+    </mat-form-field>
+  </div>
+  <div>
+    <mat-form-field appearance="fill">
+      <mat-label>date</mat-label>
+      <input matInput id="date" type="date" formControlName="date">
+      <mat-error *ngIf="expenseForm.get('date')?.invalid && expenseForm.get('date')?.touched">
+        please specify date.
+      </mat-error>
+    </mat-form-field>
+  </div>
+  <button mat-raised-button type="submit" [disabled]="expenseForm.invalid || isLoading">create</button>
+  <mat-spinner *ngIf="isLoading"></mat-spinner>
+  <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
+  <div *ngIf="successMessage">{{ successMessage }}</div>
+</form>

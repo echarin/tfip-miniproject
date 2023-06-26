@@ -1,0 +1,25 @@
+<!-- category-form.component.html -->
+<form [formGroup]="categoryForm" (ngSubmit)="onSubmit()">
+  <div>
+    <mat-form-field appearance="fill">
+      <mat-label>name</mat-label>
+      <input matInput id="name" name="name" formControlName="name">
+      <mat-error *ngIf="categoryForm.get('name')?.invalid && categoryForm.get('name')?.touched">
+        name is required.
+      </mat-error>
+    </mat-form-field>
+  </div>
+  <div>
+    <mat-form-field appearance="fill">
+      <mat-label>budgeted amount</mat-label>
+      <input matInput id="budgetedAmount" name="budgetedAmount" type="number" step="0.01" formControlName="budgetedAmount">
+      <mat-error *ngIf="categoryForm.get('budgetedAmount')?.invalid && categoryForm.get('budgetedAmount')?.touched">
+        budgeted amount is required.
+      </mat-error>
+    </mat-form-field>
+  </div>
+  <button mat-raised-button type="submit" [disabled]="categoryForm.invalid || isLoading">create</button>
+  <mat-spinner *ngIf="isLoading"></mat-spinner>
+  <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
+  <div *ngIf="successMessage">{{ successMessage }}</div>
+</form>  

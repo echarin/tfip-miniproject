@@ -1,0 +1,17 @@
+<!-- comment-form.component.html -->
+<form [formGroup]="commentForm" (ngSubmit)="onSubmit()">
+  <div>
+    <mat-form-field appearance="fill">
+      <mat-label>comment</mat-label>
+      <textarea matInput id="text" name="text" formControlName="text"></textarea>
+      <mat-error *ngIf="commentForm.get('text')?.invalid && commentForm.get('text')?.touched">
+        text is required.
+      </mat-error>
+    </mat-form-field>
+  </div>
+  <button mat-raised-button type="submit" [disabled]="commentForm.invalid || isLoading">create</button>
+  <mat-spinner *ngIf="isLoading"></mat-spinner>
+  <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
+  <div *ngIf="successMessage">{{ successMessage }}</div>
+</form>
+  

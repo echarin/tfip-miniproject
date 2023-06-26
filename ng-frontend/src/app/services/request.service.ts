@@ -2,7 +2,7 @@
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Budget, Category, Expense } from '../models/entities';
+import { Budget, Category, Expense, Comment } from '../models/entities';
 import { environment } from 'src/environments/environment';
 import { ResponseDTO } from '../models/response-dto';
 import { Page } from '../models/page';

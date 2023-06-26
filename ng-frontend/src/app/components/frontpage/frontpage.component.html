@@ -4,4 +4,6 @@
   <!-- Conditionally render login/signup -->
   <app-login *ngIf="showLogin" (showSignupEvent)="showSignupForm()"></app-login>
   <app-signup *ngIf="showSignup" (showLoginEvent)="showLoginForm()"></app-signup>
+  <p *ngIf="message">{{ message }}</p>
+  <button (click)="clearLocalStorage()">clear local storage (development)</button>
 </div>

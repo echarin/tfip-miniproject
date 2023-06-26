@@ -6,30 +6,34 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { AuthInterceptor } from './auth.interceptor';
-import { BudgetComponent } from './components/budget/budget.component';
+import { AuthInterceptor } from './auth/auth.interceptor';
+import { BudgetComponent } from './components/entities/budget/budget.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
-import { ExpenseFormComponent } from './components/expense-form/expense-form.component';
-import { ExpensesComponent } from './components/expenses/expenses.component';
+import { ExpenseFormComponent } from './components/forms/expense-form/expense-form.component';
+import { ExpensesComponent } from './components/entities/expenses/expenses.component';
 import { FrontpageComponent } from './components/frontpage/frontpage.component';
-import { LoginComponent } from './components/login/login.component';
-import { SettingsComponent } from './components/settings/settings.component';
-import { SignupComponent } from './components/signup/signup.component';
+import { LoginComponent } from './components/forms/login/login.component';
+import { SignupComponent } from './components/forms/signup/signup.component';
 import { MaterialModule } from './material.module';
-import { BudgetFormComponent } from './components/budget-form/budget-form.component';
+import { BudgetFormComponent } from './components/forms/budget-form/budget-form.component';
+import { CategoryFormComponent } from './components/forms/category-form/category-form.component';
+import { CommentFormComponent } from './components/forms/comment-form/comment-form.component';
+import { resolve } from './services/budget-resolver.service';
+import { TokenService } from './services/token.service';
 
 @NgModule({
   declarations: [
     AppComponent,
     ExpenseFormComponent,
     DashboardComponent,
-    SettingsComponent,
     BudgetComponent,
     ExpensesComponent,
     FrontpageComponent,
     LoginComponent,
     SignupComponent,
-    BudgetFormComponent
+    BudgetFormComponent,
+    CategoryFormComponent,
+    CommentFormComponent,
   ],
   imports: [
     BrowserModule,
@@ -46,7 +50,7 @@ import { BudgetFormComponent } from './components/budget-form/budget-form.compon
     BrowserAnimationsModule
   ],
   providers: [
-    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
   ],
   bootstrap: [AppComponent]
 })

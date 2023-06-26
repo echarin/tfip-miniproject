@@ -1,10 +1,9 @@
 // expense-form.component.ts
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Subject, takeUntil } from 'rxjs';
-import { AuthResponse } from 'src/app/models/auth-dtos';
-import { Expense } from 'src/app/models/entities';
+import { Category, Expense } from 'src/app/models/entities';
 import { ErrorService } from 'src/app/services/error.service';
 import { RequestService } from 'src/app/services/request.service';
 import { TokenService } from 'src/app/services/token.service';
@@ -14,11 +13,12 @@ import { TokenService } from 'src/app/services/token.service';
   templateUrl: './expense-form.component.html',
   styleUrls: ['./expense-form.component.css']
 })
-export class ExpenseFormComponent implements OnInit {
-  authDetails!: AuthResponse;
+export class ExpenseFormComponent implements OnInit, OnDestroy {
+  userId?: string;
 
   expenseForm!: FormGroup;
-  categories: string[] = [];
+  categories?: Category[];
+
   isLoading: boolean = false;
   errorMessage: string | null = null;
   successMessage: string | null = null;
@@ -36,33 +36,42 @@ export class ExpenseFormComponent implements OnInit {
       category: this.fb.control({value: null, disabled: this.isLoading}, [ Validators.required ]),
       amount: this.fb.control({value: null, disabled: this.isLoading}, [ Validators.required, Validators.min(0.01) ]),
       date: this.fb.control({value: null, disabled: this.isLoading}, [ Validators.required ]),
-      description: this.fb.control({value: null, disabled: this.isLoading})
     });
 
-    this.tokenSvc.getAuth();
+    this.userId = this.tokenSvc.getAuth()?.userId;
     this.fetchCategories();
   }
 
-  fetchCategories(): void {
-    // We hardcode this for now
-    // If user is implemented, then we would fetch categories from user
-    this.categories = ['Food', 'Transport', 'Rent', 'Entertainment', 'Other'];
+  ngOnDestroy(): void {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
   }
-  
+
+  // Allows us to populate categories dropdown
+  fetchCategories(): void {
+    if (this.userId) {
+      this.reqSvc.getCategories(this.userId).pipe(takeUntil(this.unsubscribe$)).subscribe({
+        next: (data) => this.categories = data,
+        error: (err: HttpErrorResponse) => this.errorMessage = this.errSvc.handleError(err),
+      });
+    }
+  }
 
   onSubmit(): void {
     if (this.expenseForm.valid) {
+      if (!this.userId) {
+        this.errorMessage = 'user not identified.';
+        return;
+      }
+
       this.isLoading = true;
       this.toggleFormControlsState(false);
 
-      // How do you get category ID from the category?
-
       const expense: Expense = this.expenseForm.value;
+      const categoryId: string = this.expenseForm.get('category')?.value;
       console.log(expense);
 
-      const userId: string = this.authDetails.userId;
-
-      this.reqSvc.createExpense(userId, categoryId, expense).pipe(takeUntil(this.unsubscribe$)).subscribe({
+      this.reqSvc.createExpense(this.userId, categoryId, expense).pipe(takeUntil(this.unsubscribe$)).subscribe({
         next: (data) => this.handleSubmission(data, null),
         error: (err: HttpErrorResponse) => this.handleSubmission(null, err),
       });
