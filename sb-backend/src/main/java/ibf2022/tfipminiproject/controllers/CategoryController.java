@@ -7,10 +7,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -24,6 +26,7 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequestMapping("/api/v1")
 @RequiredArgsConstructor
+@CrossOrigin("*")
 public class CategoryController {
     
     private final AuthenticationService authService;
@@ -55,6 +58,21 @@ public class CategoryController {
 
         CategoryDTO categoryResponse = categoryService.save(userId, budgetId, categoryDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(categoryResponse);
+    }
+
+    @PutMapping("/{userId}/{budgetId}/categories")
+    public ResponseEntity<CategoryDTO> updateCategory(
+        @PathVariable("userId") UUID userId,
+        @PathVariable("budgetId") UUID budgetId,
+        @RequestBody CategoryDTO categoryDTO,
+        Authentication auth
+    ) {
+        if (!authService.doesUserIdMatch(userId, auth)) {
+            throw new AccessDeniedException("You do not have access to this resource.");
+        }
+
+        CategoryDTO categoryResponse = categoryService.save(userId, budgetId, categoryDTO);
+        return ResponseEntity.ok(categoryResponse);
     }
 
     @DeleteMapping("/{userId}/categories/{categoryId}")

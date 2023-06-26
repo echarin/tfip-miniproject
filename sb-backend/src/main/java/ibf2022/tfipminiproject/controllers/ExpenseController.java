@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -82,6 +83,21 @@ public class ExpenseController {
 
         ExpenseDTO expenseResponse = expenseService.save(userId, categoryId, expenseDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(expenseResponse);
+    }
+
+    @PutMapping("/{userId}/{categoryId}/expenses")
+    public ResponseEntity<ExpenseDTO> updateExpense(
+        @PathVariable("userId") UUID userId,
+        @PathVariable("categoryId") UUID categoryId,
+        @RequestBody ExpenseDTO expenseDTO,
+        Authentication auth
+    ) {
+        if (!authService.doesUserIdMatch(userId, auth)) {
+            throw new AccessDeniedException("You do not have access to this resource.");
+        }
+
+        ExpenseDTO expenseResponse = expenseService.save(userId, categoryId, expenseDTO);
+        return ResponseEntity.ok(expenseResponse);
     }
 
     @DeleteMapping("/{userId}/expenses/{expenseId}")

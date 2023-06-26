@@ -1,5 +1,7 @@
 package ibf2022.tfipminiproject.configs;
 
+import static org.springframework.security.config.Customizer.withDefaults;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -24,6 +26,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
             .csrf(csrf -> csrf.disable()) // CSRF protection disabled: application is more vulnerable to CSRF attacks
+            .cors(withDefaults())
             .authorizeHttpRequests(authorize -> authorize
                 // Endpoints that do not need JWT token; these are for registration and authentication
                 .requestMatchers("/api/v1/auth/**") 

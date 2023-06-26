@@ -1,7 +1,6 @@
 package ibf2022.tfipminiproject.configs;
 
 import java.util.Arrays;
-import java.util.Collections;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,7 +15,7 @@ public class CorsConfig {
     public CorsFilter corsFilter() {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOriginPatterns(Collections.singletonList("http://localhost:4200")); // change this to actual origin during production
+        config.setAllowedOriginPatterns(Arrays.asList("http://localhost:4200", "http://localhost:4200/*")); // change this to actual origin during production
         config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(Arrays.asList("Origin", "Content-Type", "Accept", "Authorization"));
         config.setExposedHeaders(Arrays.asList("Origin", "Content-Type", "Accept", "Authorization"));
