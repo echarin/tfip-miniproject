@@ -36,16 +36,16 @@ spec:
               secretKeyRef:
                 name: app-secret
                 key: jwt-signing-key
-        # livenessProbe:
-        #   httpGet:
-        #     path: "/health-check"
-        #     port: 8000
-        #   initialDelaySeconds: 10
-        #   timeoutSeconds: 5
+        livenessProbe:
+          httpGet:
+            path: "/health-check"
+            port: 8080
+          initialDelaySeconds: 10
+          timeoutSeconds: 5
         readinessProbe:
           httpGet:
             path: "/health-check"
-            port: 8000
+            port: 8080
           initialDelaySeconds: 10
           timeoutSeconds: 5
 
