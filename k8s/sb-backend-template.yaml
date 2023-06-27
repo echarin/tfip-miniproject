@@ -16,7 +16,7 @@ spec:
       containers:
       - name: sb-backend
         # image: echarin/sb-backend
-        image: gcr.io/PROJECT_ID/BACKEND_IMAGE:TAG
+        image: gcr.io/${PROJECT_ID}/${BACKEND_IMAGE}:${TAG}
         imagePullPolicy: Always
         ports:
         - containerPort: 8080
