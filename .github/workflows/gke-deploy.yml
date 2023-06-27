@@ -67,7 +67,7 @@ jobs:
       #     export MONGODB_URI=${{ secrets.MONGODB_URI }}
       #     export JWT_SIGNINGKEY=${{ secrets.JWT_SIGNINGKEY }}
       #     envsubst < ./k8s/app-secret-template.yaml > ./k8s/app-secret.yaml
-      
+
       - name: Substitute image names in deployment manifests
         run: |-
           envsubst < ./k8s/sb-backend-template.yaml > ./k8s/sb-backend.yaml
@@ -75,7 +75,6 @@ jobs:
     
       - name: Deploy
         run: |-
-          kubectl apply -f ./k8s/app-secret.yaml
           kubectl apply -f ./k8s/sb-backend.yaml
           kubectl apply -f ./k8s/ng-frontend.yaml
           kubectl apply -f ./k8s/app-ingress.yaml
