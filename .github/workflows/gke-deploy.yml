@@ -1,0 +1,61 @@
+name: Build and Deploy to GKE
+
+on:
+  push:
+    branches:
+      - main
+
+env:
+  PROJECT_ID: ${{ secrets.GKE_PROJECT }}
+  GKE_CLUSTER: tfip-miniproject
+  GKE_ZONE: asia_southeast1
+  DEPLOYMENT_NAME: tfip-miniproject
+  BACKEND_IMAGE: sb-backend-image
+  FRONTEND_IMAGE: ng-frontend-image
+  TAG: 1.0.0
+
+jobs:
+  setup-build-publish-deploy:
+    name: Setup, Build, Publish, Deploy
+    runs-on: ubuntu-latest
+    
+    steps:
+    
+      - name: Checkout
+        uses: actions/checkout@v3
+        
+      - id: 'auth'
+        uses: google-github-actions/auth@v1
+        with:
+          credentials_json: ${{ secrets.GKE_SA_KEY }}
+          
+      - name: Setup Google Cloud CLI
+        uses: google-github-actions/setup-gcloud@v1
+        env:
+          ACTIONS_ALLOW_UNSECURE_COMMANDS: true
+        with:
+          project_id: ${{ secrets.GKE_PROJECT }}
+          
+      - name: Configure Docker
+        run: |-
+          gcloud --quiet auth configure-docker
+          
+      - name: Get GKE Credentials
+        uses: google-github-actions/get-gke-credentials@v1
+        with:
+          cluster_name: ${{ env.GKE_CLUSTER }}
+          location: ${{ env.GKE_ZONE }}
+          
+      - name: Build Docker images
+        run: |-
+          docker build --tag "gcr.io/$PROJECT_ID/$FRONTEND_IMAGE:$TAG" ./ng-frontend/
+          docker build --tag "gcr.io/$PROJECT_ID/$BACKEND_IMAGE:$TAG" ./sb-backend/
+      
+      - name: Push Docker images to Google Container Registry
+        run: |-
+          docker push "gcr.io/$PROJECT_ID/$FRONTEND_IMAGE:$TAG"
+          docker build --tag "gcr.io/$PROJECT_ID/$BACKEND_IMAGE:$TAG"
+      
+#       - name: Create Kubernetes Secret
+#         run: |-
+#           export MYSQL_URL=${{ secrets.MYSQL_URL }}
