@@ -48,7 +48,7 @@ spec:
             port: 8080
           initialDelaySeconds: 30
           timeoutSeconds: 30
-
+          
 ---
 
 apiVersion: v1
