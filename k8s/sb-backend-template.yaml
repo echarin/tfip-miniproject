@@ -38,17 +38,17 @@ spec:
                 key: jwt-signing-key
         livenessProbe:
           httpGet:
-            path: "/liveness-check"
+            path: "/health/liveness-check"
             port: 8080
           initialDelaySeconds: 30
           timeoutSeconds: 30
         readinessProbe:
           httpGet:
-            path: "/readiness-check"
+            path: "/health/readiness-check"
             port: 8080
           initialDelaySeconds: 30
           timeoutSeconds: 30
-          
+
 ---
 
 apiVersion: v1

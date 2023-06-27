@@ -7,7 +7,7 @@
 ## Spring Security
 
 - Upon authenticating through the frontend, the backend returns a JSON web token (JWT).
-  - The JWT contains information about the user, as well as 
+  - The JWT contains information about the user, as well as a signature, so that the backend can verify that the sender of the JWT is indeed the correct user.
 - This token is stored in your local storage and then used in the `Authorization` header when making requests to protected endpoints in the backend.
 
 ## Containerisation and Kubernetes
