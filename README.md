@@ -16,9 +16,11 @@
 ## Containerisation and Kubernetes
 
 - Both the frontend and backend are containerised with Docker, with the instructions in the `Dockerfile` of each project directory.
-- Each `Dockerfile` makes use of caching of layers for faster builds. 
+- Each `Dockerfile` makes use of caching of layers for faster builds.
+- 
 
 ## Github Actions for CI/CD
 
 - This project uses GitHub Actions in order to trigger an automated build/deploy workflow upon a push to the main branch.
-- Using the Google Cloud CLI, 
+- The workflow sets up Google Cloud CLI as well as user credentials, before building the Docker images, pushing them to Google Cloud Registry and then deploying these images to GKE.
+- There is also a side workflow for continuous testing of tests written in the Spring Boot backend.

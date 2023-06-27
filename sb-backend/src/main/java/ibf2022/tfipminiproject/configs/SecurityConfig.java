@@ -32,8 +32,7 @@ public class SecurityConfig {
                 .requestMatchers(
                     "/api/v1/auth/**", 
                     "/liveness-check",
-                    "/readiness-check",
-                    "/startup-check"
+                    "/readiness-check"
                 ).permitAll()
                 .anyRequest()
                 .authenticated())

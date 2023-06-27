@@ -48,13 +48,7 @@ spec:
             port: 8080
           initialDelaySeconds: 40
           timeoutSeconds: 5
-        startupProbe:
-          httpGet:
-            path: "/startup-check"
-            port: 8080
-          initialDelaySeconds: 40
           
-
 ---
 
 apiVersion: v1
