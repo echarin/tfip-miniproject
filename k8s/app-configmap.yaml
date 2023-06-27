@@ -1,8 +1,0 @@
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: app-configmap
-data:
-  # May not be needed with Ingress
-  # ng-frontend-url: ng-frontend-service
-  spring-profiles-active: docker

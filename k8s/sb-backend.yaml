@@ -15,8 +15,8 @@ spec:
     spec:
       containers:
       - name: sb-backend
-        image: echarin/sb-backend
-        # image: gcr.io/PROJECT_ID/BACKEND_IMAGE:B_TAG
+        # image: echarin/sb-backend
+        image: gcr.io/PROJECT_ID/BACKEND_IMAGE:TAG
         imagePullPolicy: Always
         ports:
         - containerPort: 8080
@@ -24,17 +24,17 @@ spec:
           - name: SPRING_DATASOURCE_URL
             valueFrom:
               secretKeyRef:
-                name: app-secret-test
+                name: app-secret
                 key: mysql-url
           - name: SPRING_DATA_MONGODB_URI
             valueFrom:
                 secretKeyRef:
-                  name: app-secret-test
+                  name: app-secret
                   key: mongodb-uri
           - name: JWT_SIGNINGKEY
             valueFrom:
               secretKeyRef:
-                name: app-secret-test
+                name: app-secret
                 key: jwt-signing-key
 
 ---

@@ -54,8 +54,19 @@ jobs:
       - name: Push Docker images to Google Container Registry
         run: |-
           docker push "gcr.io/$PROJECT_ID/$FRONTEND_IMAGE:$TAG"
-          docker build --tag "gcr.io/$PROJECT_ID/$BACKEND_IMAGE:$TAG"
+          docker push "gcr.io/$PROJECT_ID/$BACKEND_IMAGE:$TAG"
       
-#       - name: Create Kubernetes Secret
-#         run: |-
-#           export MYSQL_URL=${{ secrets.MYSQL_URL }}
+      - name: Create Kubernetes Secret
+        run: |-
+          export MYSQL_URL=${{ secrets.MYSQL_URL }}
+          export MONGODB_URI=${{ secrets.MONGODB_URI }}
+          export JWT_SIGNINGKEY=${{ secrets.JWT_SIGNINGKEY }}
+          envsubst < ./k8s/app-secret-template.yaml > ./k8s/app-secret.yaml
+      
+      - name: Deploy
+        run: |-
+          kubectl apply -f ./k8s/app-secret.yaml
+          kubectl apply -f ./k8s/sb-backend.yaml
+          kubectl apply -f ./k8s/ng-frontend.yaml
+          kubectl apply -f ./k8s/app-ingress.yaml
+
