@@ -18,8 +18,7 @@ import { MaterialModule } from './material.module';
 import { BudgetFormComponent } from './components/forms/budget-form/budget-form.component';
 import { CategoryFormComponent } from './components/forms/category-form/category-form.component';
 import { CommentFormComponent } from './components/forms/comment-form/comment-form.component';
-import { resolve } from './services/budget-resolver.service';
-import { TokenService } from './services/token.service';
+import { CommentsComponent } from './components/entities/comments/comments.component';
 
 @NgModule({
   declarations: [
@@ -34,6 +33,7 @@ import { TokenService } from './services/token.service';
     BudgetFormComponent,
     CategoryFormComponent,
     CommentFormComponent,
+    CommentsComponent,
   ],
   imports: [
     BrowserModule,

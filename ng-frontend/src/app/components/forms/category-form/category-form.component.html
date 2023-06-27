@@ -18,8 +18,12 @@
       </mat-error>
     </mat-form-field>
   </div>
-  <button mat-raised-button type="submit" [disabled]="categoryForm.invalid || isLoading">create</button>
+  <button mat-raised-button *ngIf="isCreate" type="submit" [disabled]="categoryForm.invalid || isLoading">create</button>
+  <button mat-raised-button *ngIf="isEdit" type="submit" [disabled]="categoryForm.invalid || isLoading">update</button>
   <mat-spinner *ngIf="isLoading"></mat-spinner>
   <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
-  <div *ngIf="successMessage">{{ successMessage }}</div>
+  <div *ngIf="successMessage">
+    {{ successMessage }}
+    <a [routerLink]="['/', userId, budgetId]">back to budget</a>
+  </div>  
 </form>  

@@ -2,6 +2,7 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
 import { Category, Expense } from 'src/app/models/entities';
 import { ErrorService } from 'src/app/services/error.service';
@@ -21,6 +22,7 @@ export class ExpenseFormComponent implements OnInit, OnDestroy {
 
   isLoading: boolean = false;
   errorMessage: string | null = null;
+  displayMessage: string | null = null;
   successMessage: string | null = null;
   private unsubscribe$ = new Subject<void>();
 
@@ -29,6 +31,8 @@ export class ExpenseFormComponent implements OnInit, OnDestroy {
     private reqSvc: RequestService,
     private errSvc: ErrorService,
     private tokenSvc: TokenService,
+    private router: Router,
+    private route: ActivatedRoute
   ) { }
 
   ngOnInit(): void {
@@ -38,7 +42,19 @@ export class ExpenseFormComponent implements OnInit, OnDestroy {
       date: this.fb.control({value: null, disabled: this.isLoading}, [ Validators.required ]),
     });
 
-    this.userId = this.tokenSvc.getAuth()?.userId;
+    const parentParam = this.route.parent?.snapshot.paramMap.get('userId');
+    if (parentParam !== null) {
+      this.userId = parentParam;
+    }
+
+    const authId = this.tokenSvc.getAuth()?.userId;
+    if (authId !== this.userId) {
+      this.errorMessage = 'you do not have access to this resource.'
+      this.router.navigate(['/', this.userId, 'budget'], { queryParams: 
+        { message: this.errorMessage } 
+      });
+    } 
+
     this.fetchCategories();
   }
 
@@ -50,8 +66,14 @@ export class ExpenseFormComponent implements OnInit, OnDestroy {
   // Allows us to populate categories dropdown
   fetchCategories(): void {
     if (this.userId) {
+      this.isLoading = true;
+      this.displayMessage = 'fetching categories...';
       this.reqSvc.getCategories(this.userId).pipe(takeUntil(this.unsubscribe$)).subscribe({
-        next: (data) => this.categories = data,
+        next: (data) => {
+          this.categories = data
+          this.isLoading = false;
+          this.displayMessage = null;
+        },
         error: (err: HttpErrorResponse) => this.errorMessage = this.errSvc.handleError(err),
       });
     }
@@ -71,7 +93,7 @@ export class ExpenseFormComponent implements OnInit, OnDestroy {
       const categoryId: string = this.expenseForm.get('category')?.value;
       console.log(expense);
 
-      this.reqSvc.createExpense(this.userId, categoryId, expense).pipe(takeUntil(this.unsubscribe$)).subscribe({
+      this.reqSvc.createExpense(expense, this.userId, categoryId).pipe(takeUntil(this.unsubscribe$)).subscribe({
         next: (data) => this.handleSubmission(data, null),
         error: (err: HttpErrorResponse) => this.handleSubmission(null, err),
       });

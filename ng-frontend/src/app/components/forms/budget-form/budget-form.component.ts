@@ -2,6 +2,7 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
 import { Budget } from 'src/app/models/entities';
 import { ErrorService } from 'src/app/services/error.service';
@@ -15,6 +16,7 @@ import { TokenService } from 'src/app/services/token.service';
 })
 export class BudgetFormComponent implements OnInit, OnDestroy {
   userId?: string;
+  budgetId?: string;
 
   budgetForm!: FormGroup;
 
@@ -27,7 +29,9 @@ export class BudgetFormComponent implements OnInit, OnDestroy {
     private fb: FormBuilder,
     private reqSvc: RequestService,
     private errSvc: ErrorService,
-    private tokenSvc: TokenService
+    private tokenSvc: TokenService,
+    private router: Router,
+    private route: ActivatedRoute
   ) { }
 
   ngOnInit(): void {
@@ -35,8 +39,19 @@ export class BudgetFormComponent implements OnInit, OnDestroy {
       name: this.fb.control({value: null, disabled: this.isLoading}, [ Validators.required ]),
       moneyPool: this.fb.control({value: null, disabled: this.isLoading}, [ Validators.required ]),
     });
+    
+    const parentParam = this.route.parent?.snapshot.paramMap.get('userId');
+    if (parentParam !== null) {
+      this.userId = parentParam;
+    }
 
-    this.userId = this.tokenSvc.getAuth()?.userId;
+    const authId = this.tokenSvc.getAuth()?.userId;
+    if (authId !== this.userId) {
+      this.errorMessage = 'you do not have access to this resource.'
+      this.router.navigate(['/', this.userId, 'budget'], { queryParams: 
+        { message: this.errorMessage } 
+      });
+    }
   }
 
   ngOnDestroy(): void {
@@ -48,6 +63,9 @@ export class BudgetFormComponent implements OnInit, OnDestroy {
     if (this.budgetForm.valid) {
       if (!this.userId) {
         this.errorMessage = 'user not identified.';
+        this.router.navigate([''], { queryParams: 
+          { message: this.errorMessage } 
+        });
         return;
       }
 
@@ -71,6 +89,7 @@ export class BudgetFormComponent implements OnInit, OnDestroy {
     if (data) {
       this.budgetForm.reset();
       this.successMessage = 'budget successfully submitted!';
+      this.budgetId = data.id;
     } else if (error) {
       this.errorMessage = this.errSvc.handleError(error);
     }

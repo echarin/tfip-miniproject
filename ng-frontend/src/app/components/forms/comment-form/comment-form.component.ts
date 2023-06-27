@@ -2,6 +2,7 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
 import { Comment } from 'src/app/models/entities';
 import { ErrorService } from 'src/app/services/error.service';
@@ -28,7 +29,9 @@ export class CommentFormComponent implements OnInit, OnDestroy {
     private fb: FormBuilder,
     private reqSvc: RequestService,
     private errSvc: ErrorService,
-    private tokenSvc: TokenService
+    private tokenSvc: TokenService,
+    private router: Router,
+    private route: ActivatedRoute
   ) { }
 
   ngOnInit(): void {
@@ -36,8 +39,27 @@ export class CommentFormComponent implements OnInit, OnDestroy {
       text: this.fb.control({value: null, disabled: this.isLoading}, [ Validators.required ]),
     });
 
-    const auth = this.tokenSvc.getAuth();
-    this.userId = auth?.userId;
+    const parentParam = this.route.parent?.snapshot.paramMap.get('userId');
+    if (parentParam !== null) {
+      this.userId = parentParam;
+    }
+
+    const authId = this.tokenSvc.getAuth()?.userId;
+    if (authId !== this.userId) {
+      this.errorMessage = 'you do not have access to this resource.'
+      this.router.navigate(['/', this.userId, 'budget'], { queryParams: 
+        { message: this.errorMessage } 
+      });
+    }
+
+    console.log("userId: " + this.userId);
+
+    this.route.params.pipe(takeUntil(this.unsubscribe$)).subscribe({
+      next: (params) => {
+        this.expenseId = params['expenseId'];
+        console.log("expenseId: " + this.expenseId);
+      }
+    });
   }
 
   ngOnDestroy(): void {

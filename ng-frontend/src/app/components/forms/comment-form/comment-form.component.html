@@ -12,6 +12,9 @@
   <button mat-raised-button type="submit" [disabled]="commentForm.invalid || isLoading">create</button>
   <mat-spinner *ngIf="isLoading"></mat-spinner>
   <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
-  <div *ngIf="successMessage">{{ successMessage }}</div>
+  <div *ngIf="successMessage">
+    {{ successMessage }}
+    <a [routerLink]="['/', userId, expenseId]">back to expense</a>
+  </div>  
 </form>
   

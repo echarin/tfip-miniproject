@@ -1,8 +1,9 @@
+// page.ts
 export interface Page<T> {
-    content: T[];
-    totalElements: number;
-    totalPages: number;
-    last: boolean;
-    size: number;
-    number: number;
-  }
+  content: T[];
+  totalElements: number;
+  totalPages: number;
+  last: boolean;
+  size: number;
+  number: number;
+}

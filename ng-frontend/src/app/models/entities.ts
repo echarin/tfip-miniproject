@@ -10,7 +10,7 @@ export interface Expense {
     amount: number;
     date: string;
     createdAt: string;
-    categoryId: string;
+    categoryName: string;
 }
 
 export interface Category {
@@ -18,7 +18,6 @@ export interface Category {
     name: string;
     budgetedAmount: number;
     createdAt: string;
-    budgetId: string;
 }
 
 export interface Budget {
@@ -26,7 +25,6 @@ export interface Budget {
     name: string;
     moneyPool: number;
     createdAt: string;
-    userId: string;
 }
 
 export interface User {
