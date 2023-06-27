@@ -3,4 +3,6 @@ kind: ConfigMap
 metadata:
   name: app-configmap
 data:
-  key: value
+  # May not be needed with Ingress
+  # ng-frontend-url: ng-frontend-service
+  spring-profiles-active: docker
