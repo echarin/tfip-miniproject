@@ -8,7 +8,7 @@ on:
 env:
   PROJECT_ID: ${{ secrets.PROJECT_ID }}
   GKE_CLUSTER: tfip-miniproject
-  GKE_ZONE: asia-southeast1
+  GKE_ZONE: asia-southeast1-a
   DEPLOYMENT_NAME: tfip-miniproject
   BACKEND_IMAGE: sb-backend-image
   FRONTEND_IMAGE: ng-frontend-image
@@ -69,4 +69,6 @@ jobs:
           kubectl apply -f ./k8s/sb-backend.yaml
           kubectl apply -f ./k8s/ng-frontend.yaml
           kubectl apply -f ./k8s/app-ingress.yaml
+          kubectl rollout status deployment/$DEPLOYMENT_NAME
+          kubectl get services -o wide
 
