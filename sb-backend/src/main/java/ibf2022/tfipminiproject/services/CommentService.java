@@ -46,8 +46,11 @@ public class CommentService {
         if (!userOwnsExpense) {
             throw new AccessDeniedException("You do not have access to this resource.");
         }
+
+        Comment toSave = commentMapper.commentDTOToComment(comment);
+        toSave.setExpenseId(expenseId);
         
-        Comment savedComment = commentRepository.save(commentMapper.commentDTOToComment(comment));
+        Comment savedComment = commentRepository.save(toSave);
         return commentMapper.commentToCommentDTO(savedComment);
     }
 
