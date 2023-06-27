@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sb-backend-deployment
+  labels:
+    app: sb-backend
+spec:
+  selector:
+    matchLabels:
+      app: sb-backend
+  template:
+    metadata:
+      labels:
+        app: sb-backend
+    spec:
+      containers:
+      - name: sb-backend
+        image: gcr.io/PROJECT_ID/IMAGE:TAG # Change this according to image name
+        imagePullPolicy: Always
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        ports:
+        - containerPort: 8080
