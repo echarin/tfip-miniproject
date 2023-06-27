@@ -1,7 +1,7 @@
 // environment.ts
 export const environment = {
-    production: false,
-    sbServerUrl: 'http://localhost:8080',
+    production: true,
+    sbServerUrl: 'http://localhost:8080', // make this dynamic later
     api: '/api/v1',
     auth: '/api/v1/auth'
 };
