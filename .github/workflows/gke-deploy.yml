@@ -47,9 +47,10 @@ jobs:
           cluster_name: ${{ env.GKE_CLUSTER }}
           location: ${{ env.GKE_ZONE }}
 
-      - name: Create Kubernetes Secret
-        run: |-
-          kubectl create secret generic app-secret --from-literal=jwt-signing-key=${{ secrets.JWT_SIGNINGKEY }} --from-literal=mysql-url=${{ secrets.MYSQL_URL }} --from-literal=mongodb-uri=${{ secrets.MONGODB_URI }} --dry-run=client -o yaml | kubectl apply -f -
+      # - name: Create Kubernetes Secret
+      #   run: |-
+      #     kubectl create secret generic app-secret --from-literal=jwt-signing-key=${{ secrets.JWT_SIGNINGKEY }} --from-literal=mysql-url=${{ secrets.MYSQL_URL }} --from-literal=mongodb-uri=${{ secrets.MONGODB_URI }} -o yaml | kubectl apply -f -
+      # --dry-run=client
           
       - name: Build Docker images
         run: |-
