@@ -49,7 +49,6 @@ jobs:
 
       - name: Create Kubernetes Secret
         run: |-
-          rm app-secret
           kubectl create secret generic app-secret --from-literal=jwt-signing-key=${{ secrets.JWT_SIGNINGKEY }} --from-literal=mysql-url=${{ secrets.MYSQL_URL }} --from-literal=mongodb-uri=${{ secrets.MONGODB_URI }} --dry-run=client -o yaml | kubectl apply -f -
           
       - name: Build Docker images
