@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ng-frontend-deployment
+  labels:
+    app: ng-frontend
+spec:
+  selector:
+    matchLabels:
+      app: ng-frontend
+  template:
+    metadata:
+      labels:
+        app: ng-frontend
+    spec:
+      containers:
+      - name: ng-frontend
+        image: gcr.io/PROJECT_ID/FRONTEND_IMAGE:F_TAG
+        imagePullPolicy: Always
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        ports:
+        - containerPort: 8080
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: sb-backend-service
+spec:
+  # Default type is ClusterIP
+  selector:
+    app: sb-backend
+  ports:
+  - port: 8080
+    targetPort: 8080

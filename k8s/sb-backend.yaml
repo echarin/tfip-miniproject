@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: sb-backend
-        image: gcr.io/PROJECT_ID/IMAGE:TAG # Change this according to image name
+        image: gcr.io/PROJECT_ID/BACKEND_IMAGE:B_TAG
         imagePullPolicy: Always
         resources:
           limits:
@@ -23,3 +23,17 @@ spec:
             cpu: "500m"
         ports:
         - containerPort: 8080
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: sb-backend-service
+spec:
+  # Default type is ClusterIP
+  selector:
+    app: sb-backend
+  ports:
+  - port: 8080
+    targetPort: 8080
