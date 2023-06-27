@@ -7,6 +7,9 @@ on:
     paths:
       - 'sb-backend/**'
 
+env: 
+  JWT_SIGNINGKEY: ${{ secrets.JWT_SIGNINGKEY }}
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -31,10 +34,6 @@ jobs:
 
       - name: Build with Maven
         run: mvn -B package --file sb-backend/pom.xml
-        env:
-          JWT_SIGNINGKEY: ${{ secrets.JWT_SIGNINGKEY }}
 
       - name: Test with Maven
         run: mvn -B test --file sb-backend/pom.xml
-        env:
-          JWT_SIGNINGKEY: ${{ secrets.JWT_SIGNINGKEY }}
