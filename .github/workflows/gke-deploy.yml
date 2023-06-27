@@ -46,6 +46,11 @@ jobs:
         with:
           cluster_name: ${{ env.GKE_CLUSTER }}
           location: ${{ env.GKE_ZONE }}
+
+      - name: Create Kubernetes Secret
+        run: |-
+          rm app-secret
+          kubectl create secret generic app-secret --from-literal=jwt-signing-key=${{ secrets.JWT_SIGNINGKEY }} --from-literal=mysql-url=${{ secrets.MYSQL_URL }} --from-literal=mongodb-uri=${{ secrets.MONGODB_URI }} --dry-run=client -o yaml | kubectl apply -f -
           
       - name: Build Docker images
         run: |-
@@ -63,10 +68,6 @@ jobs:
       #     export MONGODB_URI=${{ secrets.MONGODB_URI }}
       #     export JWT_SIGNINGKEY=${{ secrets.JWT_SIGNINGKEY }}
       #     envsubst < ./k8s/app-secret-template.yaml > ./k8s/app-secret.yaml
-      
-      - name: Create Kubernetes Secret
-        run: |-
-          kubectl create secret generic app-secret --from-literal=jwt-signing-key=${{ secrets.JWT_SIGNINGKEY }} --from-literal=mysql-url=${{ secrets.MYSQL_URL }} --from-literal=mongodb-uri=${{ secrets.MONGODB_URI }} --dry-run=client -o yaml | kubectl apply -f -
       
       - name: Substitute image names in deployment manifests
         run: |-
