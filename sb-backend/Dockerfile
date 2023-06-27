@@ -11,18 +11,6 @@ FROM eclipse-temurin:20-jdk-alpine
 WORKDIR /app
 COPY --from=build /app/target/tfip-miniproject-0.0.1-SNAPSHOT.jar ./tfip-miniproject-0.0.1-SNAPSHOT.jar
 
-# Specify environment variables required at build time
-ARG SPRING_PROFILES_ACTIVE
-ARG SPRING_DATASOURCE_URL
-ARG SPRING_DATA_MONGODB_URI
-ARG JWT_SIGNINGKEY
-
-# Make these variables available at runtime
-ENV SPRING_PROFILES_ACTIVE=docker
-ENV SPRING_DATASOURCE_URL=$SPRING_DATASOURCE_URL
-ENV SPRING_DATA_MONGODB_URI=$SPRING_DATA_MONGODB_URI
-ENV JWT_SIGNINGKEY=$JWT_SIGNINGKEY
-
 # Specify the command to run your application
 ENTRYPOINT [ "java", "-jar", "./tfip-miniproject-0.0.1-SNAPSHOT.jar" ]
 

@@ -15,7 +15,8 @@ spec:
     spec:
       containers:
       - name: ng-frontend
-        image: gcr.io/PROJECT_ID/FRONTEND_IMAGE:F_TAG
+        image: echarin/ng-frontend
+        # image: gcr.io/PROJECT_ID/FRONTEND_IMAGE:F_TAG
         imagePullPolicy: Always
         resources:
           limits:

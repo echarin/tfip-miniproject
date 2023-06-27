@@ -15,12 +15,9 @@ spec:
     spec:
       containers:
       - name: sb-backend
-        image: gcr.io/PROJECT_ID/BACKEND_IMAGE:B_TAG
+        image: echarin/sb-backend
+        # image: gcr.io/PROJECT_ID/BACKEND_IMAGE:B_TAG
         imagePullPolicy: Always
-        resources:
-          limits:
-            memory: "128Mi"
-            cpu: "500m"
         ports:
         - containerPort: 8080
         env:
