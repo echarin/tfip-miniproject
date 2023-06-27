@@ -32,8 +32,10 @@ public class SecurityConfig {
                 .requestMatchers(
                     "/api/v1/auth/**", 
                     "/liveness-check",
-                    "/readiness-check"
-                ).permitAll()
+                    "/readiness-check",
+                    "/startup-check"
+                )
+                .permitAll()
                 .anyRequest()
                 .authenticated())
             .sessionManagement(session -> session
