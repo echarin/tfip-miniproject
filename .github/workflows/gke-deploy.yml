@@ -34,6 +34,7 @@ jobs:
         env:
           ACTIONS_ALLOW_UNSECURE_COMMANDS: true
         with:
+          version: 'latest'
           project_id: ${{ secrets.PROJECT_ID }}
           
       - name: Configure Docker
@@ -68,8 +69,8 @@ jobs:
           kubectl create secret generic app-secret \
             --from-literal=jwt-signing-key=${{ secrets.JWT_SIGNINGKEY }} \
             --from-literal=mysql-url=${{ secrets.MYSQL_URL }} \
-            --from-literal=mongodb-uri=${{ secrets.MONGODB_URI }} \
-            --dry-run=client -o yaml | kubectl apply -f -  
+            --from-literal=mongodb-uri=${{ secrets.MONGODB_URI }}
+          kubectl apply -f -  
       
       - name: Substitute image names in deployment manifests
         run: |-
