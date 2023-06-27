@@ -18,5 +18,6 @@ public class ExpenseDTO {
     private UUID id;
     private BigDecimal amount;
     private LocalDate date;
+    private String categoryName;
     private LocalDateTime createdAt;
 }

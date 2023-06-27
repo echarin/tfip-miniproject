@@ -1,9 +1,9 @@
 package ibf2022.tfipminiproject.services;
 
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 
@@ -26,9 +26,15 @@ public class CommentService {
     private final CommentRepository commentRepository;
     private final CommentMapper commentMapper;
 
-    public Page<CommentDTO> findAllByExpenseId(UUID expenseId, Pageable pageable) {
-        return commentRepository.findByExpenseId(expenseId, pageable)
-                .map(commentMapper::commentToCommentDTO);
+    // public Page<CommentDTO> findAllByExpenseId(UUID expenseId, Pageable pageable) {
+    //     return commentRepository.findByExpenseId(expenseId, pageable)
+    //             .map(commentMapper::commentToCommentDTO);
+    // }
+
+    public List<CommentDTO> findAllByExpenseId(UUID expenseId) {
+        return commentRepository.findByExpenseId(expenseId).stream()
+                .map(commentMapper::commentToCommentDTO)
+                .collect(Collectors.toList());
     }
 
     public CommentDTO save(UUID userId, UUID expenseId, CommentDTO comment) {

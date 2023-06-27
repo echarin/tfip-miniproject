@@ -8,6 +8,7 @@ import ibf2022.tfipminiproject.sqlentities.Expense;
 
 @Mapper(componentModel = "spring")
 public interface ExpenseMapper {
+    @Mapping(source = "category.name", target = "categoryName")
     ExpenseDTO expenseToExpenseDTO(Expense expense);
 
     @Mapping(target = "category", ignore = true)

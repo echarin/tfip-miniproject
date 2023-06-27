@@ -36,6 +36,20 @@ public class ExpenseController {
     private final AuthenticationService authService;
     private final ExpenseService expenseService;
 
+    @GetMapping("/{userId}/expenses/{expenseId}")
+    public ResponseEntity<ExpenseDTO> getExpense(
+        @PathVariable("userId") UUID userId,
+        @PathVariable("expenseId") UUID expenseId,
+        Authentication auth
+    ) {
+        if (!authService.doesUserIdMatch(userId, auth)) {
+            throw new AccessDeniedException("You do not have access to this resource.");
+        }
+
+        ExpenseDTO expenseResponse = expenseService.getExpense(userId, expenseId);
+        return ResponseEntity.ok(expenseResponse);
+    }
+    
     @GetMapping("/{userId}/expenses")
     public ResponseEntity<Page<ExpenseDTO>> getAllExpensesByUser(
         @PathVariable("userId") UUID userId,

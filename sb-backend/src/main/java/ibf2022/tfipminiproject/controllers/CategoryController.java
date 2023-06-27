@@ -45,6 +45,20 @@ public class CategoryController {
         return ResponseEntity.ok(categoriesResponse);
     }
 
+    @GetMapping("/{userId}/categories/{categoryId}")
+    public ResponseEntity<CategoryDTO> getCategory(
+        @PathVariable("userId") UUID userId,
+        @PathVariable("categoryId") UUID categoryId,
+        Authentication auth
+    ) {
+        if (!authService.doesUserIdMatch(userId, auth)) {
+            throw new AccessDeniedException("You do not have access to this resource.");
+        }
+
+        CategoryDTO categoryResponse = categoryService.getCategory(userId, categoryId);
+        return ResponseEntity.ok(categoryResponse);
+    }
+
     @PostMapping("/{userId}/{budgetId}/categories")
     public ResponseEntity<CategoryDTO> createCategory(
         @PathVariable("userId") UUID userId,

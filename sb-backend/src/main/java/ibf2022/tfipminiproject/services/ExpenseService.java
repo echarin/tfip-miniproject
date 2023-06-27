@@ -1,5 +1,6 @@
 package ibf2022.tfipminiproject.services;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
@@ -32,6 +33,22 @@ public class ExpenseService {
     private final CategoryRepository categoryRepository;
     private final ExpenseRepository expenseRepository;
     private final ExpenseMapper expenseMapper;
+    
+    public ExpenseDTO getExpense(UUID userId, UUID expenseId) {
+        User user = userRepository.findById(userId)
+            .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        
+        boolean userOwnsExpense = expenseRepository.existsByUserAndId(user, expenseId);
+
+        if (!userOwnsExpense) {
+            throw new AccessDeniedException("You do not have access to this resource.");
+        }
+
+        Expense expense = expenseRepository.findById(expenseId)
+            .orElseThrow(() -> new ResourceNotFoundException("Expense not found"));
+        
+        return expenseMapper.expenseToExpenseDTO(expense);
+    }
     
     public Page<ExpenseDTO> getAllExpensesByUser(
         UUID userId, LocalDate from, LocalDate to, Pageable pageable
@@ -76,7 +93,16 @@ public class ExpenseService {
             throw new AccessDeniedException("You do not have access to this resource.");
         }
         
+        // Business logic: Adding an expense with an amount will subtract from category
         Expense expense = expenseMapper.expenseDTOToExpense(expenseDTO);
+        BigDecimal expenseAmount = expense.getAmount();
+        BigDecimal categoryAmount = category.getBudgetedAmount();
+
+        if (expenseAmount == null || categoryAmount == null) {
+            throw new EntityProcessingException("Budgeted amounts were not set");
+        }
+        
+        category.setBudgetedAmount(categoryAmount.subtract(expenseAmount));
         category.addExpense(expense);
         categoryRepository.save(category);
 
@@ -100,10 +126,18 @@ public class ExpenseService {
             throw new AccessDeniedException("You do not have access to this resource.");
         }
 
+        // Business logic: Deleting an expense with an amount will return it to category pool
         Expense expense = expenseRepository.findById(expenseId)
             .orElseThrow(() -> new ResourceNotFoundException("Expense not found"));
-        
         Category category = expense.getCategory();
+        BigDecimal expenseAmount = expense.getAmount();
+        BigDecimal categoryAmount = category.getBudgetedAmount();
+
+        if (expenseAmount == null || categoryAmount == null) {
+            throw new EntityProcessingException("Budgeted amounts were not set");
+        }
+        
+        category.setBudgetedAmount(categoryAmount.add(expenseAmount));
         category.removeExpense(expense);
         categoryRepository.save(category);
         // orphanRemoval = true

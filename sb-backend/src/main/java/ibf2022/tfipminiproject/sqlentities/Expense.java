@@ -25,7 +25,6 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Expense extends Auditable {
-
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
@@ -40,6 +39,4 @@ public class Expense extends Auditable {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id")
     private Category category;
-
-    
 }
