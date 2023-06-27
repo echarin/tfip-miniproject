@@ -1,3 +1,4 @@
 ### VS Code ###
 .vscode/
 notes/
+k8s/app-secret-test.yaml
