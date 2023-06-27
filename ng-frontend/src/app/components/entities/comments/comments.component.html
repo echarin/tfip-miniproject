@@ -1,1 +1,43 @@
-<p>comments works!</p>
+<!-- comments.component.html -->
+<ng-container *ngIf="!isLoading; else loading">
+  <div class="top-bar">
+    <div class="right">
+      <div *ngIf="errorMessage" class="error-message">{{ errorMessage | lowercase }}</div>
+      <div *ngIf="displayMessage">{{ displayMessage | lowercase }}</div>
+      <button mat-raised-button [routerLink]="['/', userId, 'expenses', expenseId, 'createComment']">create comment</button>
+    </div>
+  </div>
+  <table mat-table *ngIf="comments && comments.length > 0; else noCommentTemplate" [dataSource]="comments">
+    <ng-container matColumnDef="id">
+      <th mat-header-cell *matHeaderCellDef> id </th>
+      <td mat-cell *matCellDef="let comment"> {{ comment.id }} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="comment">
+      <th mat-header-cell *matHeaderCellDef> comment </th>
+      <td mat-cell *matCellDef="let comment"> {{ comment.text | lowercase }} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="delete">
+      <th mat-header-cell *matHeaderCellDef> </th>
+      <td mat-cell *matCellDef="let comment"> 
+        <button mat-button (click)="onDeleteComment(comment.id)">delete</button>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+</ng-container>
+
+<ng-template #loading>
+  <div class="center">
+    <mat-spinner></mat-spinner>
+  </div>
+</ng-template>
+
+<ng-template #noCommentTemplate>
+  <div class="center">
+    <p>no comment. create one!</p>
+  </div>
+</ng-template>

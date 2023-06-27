@@ -14,7 +14,7 @@
   <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
   <div *ngIf="successMessage">
     {{ successMessage }}
-    <a [routerLink]="['/', userId, expenseId]">back to expense</a>
+    <a [routerLink]="['/', userId, 'expenses', expenseId]">back to expense</a>
   </div>  
 </form>
   

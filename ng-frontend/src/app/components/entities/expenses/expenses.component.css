@@ -50,8 +50,8 @@ th, td {
   border-bottom: 1px solid #ddd;
 }
 
-.mat-row:hover {
-  background-color: #CCE5FF;
+td:hover {
+  background-color: #8c9fb4;
   cursor: pointer;
 }
 
