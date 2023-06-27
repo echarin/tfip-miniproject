@@ -8,7 +8,9 @@
 
 - Upon authenticating through the frontend, the backend returns a JSON web token (JWT).
   - The JWT contains information about the user, as well as a signature, so that the backend can verify that the sender of the JWT is indeed the correct user.
+- Some endpoints are 
 - This token is stored in your local storage and then used in the `Authorization` header when making requests to protected endpoints in the backend.
+- This token is also used on the frontend to verify that you are permitted to access its endpoints (e.g. the userId in the endpoint is the same as your userId).
 
 ## Containerisation and Kubernetes
 

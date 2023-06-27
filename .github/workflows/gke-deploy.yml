@@ -4,6 +4,10 @@ on:
   push:
     branches:
       - main
+    paths:
+      - 'sb-backend/**'
+      - 'ng-frontend/**'
+      - 'k8s/**'
 
 env:
   PROJECT_ID: ${{ secrets.PROJECT_ID }}

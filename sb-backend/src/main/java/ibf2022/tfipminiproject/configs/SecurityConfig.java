@@ -29,7 +29,7 @@ public class SecurityConfig {
             .cors(withDefaults())
             .authorizeHttpRequests(authorize -> authorize
                 // Endpoints that do not need JWT token; these are for registration, authentication and K8s health check
-                .requestMatchers("/api/v1/auth/**", "/health") 
+                .requestMatchers("/api/v1/auth/**", "/health/**")
                 .permitAll()
                 .anyRequest()
                 .authenticated())

@@ -40,14 +40,20 @@ spec:
           httpGet:
             path: "/health/liveness-check"
             port: 8080
-          initialDelaySeconds: 30
-          timeoutSeconds: 30
+          initialDelaySeconds: 40
+          timeoutSeconds: 5
         readinessProbe:
           httpGet:
             path: "/health/readiness-check"
             port: 8080
-          initialDelaySeconds: 30
-          timeoutSeconds: 30
+          initialDelaySeconds: 40
+          timeoutSeconds: 5
+        startupProbe:
+          httpGet:
+            path: "/health/startup-check"
+            port: 8080
+          initialDelaySeconds: 40
+          
 
 ---
 
