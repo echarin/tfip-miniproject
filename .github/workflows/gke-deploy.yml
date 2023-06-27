@@ -46,11 +46,6 @@ jobs:
         with:
           cluster_name: ${{ env.GKE_CLUSTER }}
           location: ${{ env.GKE_ZONE }}
-
-      # - name: Create Kubernetes Secret
-      #   run: |-
-      #     kubectl create secret generic app-secret --from-literal=jwt-signing-key=${{ secrets.JWT_SIGNINGKEY }} --from-literal=mysql-url=${{ secrets.MYSQL_URL }} --from-literal=mongodb-uri=${{ secrets.MONGODB_URI }} -o yaml | kubectl apply -f -
-      # --dry-run=client
           
       - name: Build Docker images
         run: |-
@@ -61,24 +56,15 @@ jobs:
         run: |-
           docker push "gcr.io/$PROJECT_ID/$FRONTEND_IMAGE:$TAG"
           docker push "gcr.io/$PROJECT_ID/$BACKEND_IMAGE:$TAG"
-      
-      # - name: Create Kubernetes Secret
-      #   run: |-
-      #     export MYSQL_URL=${{ secrets.MYSQL_URL }}
-      #     export MONGODB_URI=${{ secrets.MONGODB_URI }}
-      #     export JWT_SIGNINGKEY=${{ secrets.JWT_SIGNINGKEY }}
-      #     envsubst < ./k8s/app-secret-template.yaml > ./k8s/app-secret.yaml
 
       - name: Substitute image names in deployment manifests
         run: |-
           envsubst < ./k8s/sb-backend-template.yaml > ./k8s/sb-backend.yaml
           envsubst < ./k8s/ng-frontend-template.yaml > ./k8s/ng-frontend.yaml
     
-      - name: Deploy
+      - name: Deploy to GKE
         run: |-
           kubectl apply -f ./k8s/sb-backend.yaml
           kubectl apply -f ./k8s/ng-frontend.yaml
           kubectl apply -f ./k8s/app-ingress.yaml
-          kubectl rollout status deployment/$DEPLOYMENT_NAME
-          kubectl get services -o wide
 
