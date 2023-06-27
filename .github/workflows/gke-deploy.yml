@@ -6,7 +6,7 @@ on:
       - main
 
 env:
-  PROJECT_ID: ${{ secrets.GKE_PROJECT }}
+  PROJECT_ID: ${{ secrets.PROJECT_ID }}
   GKE_CLUSTER: tfip-miniproject
   GKE_ZONE: asia-southeast1
   DEPLOYMENT_NAME: tfip-miniproject
@@ -34,7 +34,7 @@ jobs:
         env:
           ACTIONS_ALLOW_UNSECURE_COMMANDS: true
         with:
-          project_id: ${{ secrets.GKE_PROJECT }}
+          project_id: ${{ secrets.PROJECT_ID }}
           
       - name: Configure Docker
         run: |-
