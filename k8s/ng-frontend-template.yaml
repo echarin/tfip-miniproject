@@ -18,12 +18,14 @@ spec:
         # image: echarin/ng-frontend
         image: gcr.io/${PROJECT_ID}/${FRONTEND_IMAGE}:${TAG}
         imagePullPolicy: Always
-        resources:
-          limits:
-            memory: "128Mi"
-            cpu: "500m"
         ports:
         - containerPort: 80
+        readinessProbe:
+          httpGet:
+            path: "/"
+            port: 8080
+          initialDelaySeconds: 40
+          timeoutSeconds: 5
 
 ---
 

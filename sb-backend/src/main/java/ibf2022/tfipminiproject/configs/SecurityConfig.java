@@ -30,10 +30,8 @@ public class SecurityConfig {
             .authorizeHttpRequests(authorize -> authorize
                 // Endpoints that do not need JWT token; these are for registration, authentication and K8s health check
                 .requestMatchers(
-                    "/api/v1/auth/**", 
-                    "/liveness-check",
-                    "/readiness-check",
-                    "/startup-check"
+                    "/api/v1/auth/**",
+                    "/api/health"
                 )
                 .permitAll()
                 .anyRequest()

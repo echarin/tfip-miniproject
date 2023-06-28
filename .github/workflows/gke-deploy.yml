@@ -70,6 +70,7 @@ jobs:
         run: |-
           kubectl apply -f ./k8s/sb-backend.yaml
           kubectl apply -f ./k8s/ng-frontend.yaml
-          kubectl apply -f ./k8s/sb-ingress.yaml
-          kubectl apply -f ./k8s/ng-ingress.yaml
+          kubectl apply -f ./k8s/app-ingress.yaml
+        # kubectl apply -f ./k8s/sb-ingress.yaml
+        # kubectl apply -f ./k8s/ng-ingress.yaml
 
