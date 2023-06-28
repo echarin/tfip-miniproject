@@ -8,13 +8,13 @@ spec:
   rules:
   - http:
       paths:
-      - pathType: Prefix
-        path: "/api"
-        backend:
-          service:
-            name: sb-backend-service
-            port: 
-              number: 8080
+      # - pathType: Prefix
+      #   path: "/api"
+      #   backend:
+      #     service:
+      #       name: sb-backend-service
+      #       port: 
+      #         number: 8080
       - pathType: Prefix
         path: "/"
         backend:
