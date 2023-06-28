@@ -4,9 +4,9 @@
 
 **budgetr** is a full stack application with an Angular frontend and a Spring Boot backend. The backend is secured with Spring Security using JWT. The application is containerised and deployed onto a Google Kubernetes Engine (GKE) cluster. The frontend also lightly uses Angular Material.
 
-Within the project deadline, I didn't manage to fully deploy onto the Kubernetes cluster, so as of now this project is deployed onto Railway and Vercel; this was done after the project deadline.
+Within the project deadline, I didn't manage to fully deploy onto the Kubernetes cluster. Therefore, this project is also deployed onto Railway and Vercel; this was done after the project deadline.
 
-As of the project deadline, the deployment was not ready, but has been resolved since. If you want to have a look, here are the links:
+As of the project deadline, the deployment was not ready, but the issue has been resolved since. If you want to have a look, here are the links:
 
 - Kubernetes Ingress endpoint: [http://34.102.214.43/]
 - Vercel: [https://tfip-miniproject-ykha.vercel.app/]
@@ -25,9 +25,10 @@ As of the project deadline, the deployment was not ready, but has been resolved 
 - Both the frontend and backend are containerised with Docker, with the instructions in the `Dockerfile` of each project directory.
 - Each `Dockerfile` makes use of caching of layers for faster builds.
 - The manifests for the Kubernetes cluster are in the `k8s` folder.
-  - The `Deployment` and `Service` components of each portion of the app are defined in a template `.yaml` file.
-  - Both services are internal services.
-  - An `Ingress` is meant to expose the services. It can be accessed at [http://34.102.214.43/], but the Spring Boot backend is failing health checks.
+- The `Deployment` and `Service` components of each portion of the app are defined in a template `.yaml` file.
+- A `Secret` is used for credentials; it was applied before applying the `.yaml` files.
+- Both services are internal services.
+  - An `Ingress` is used to expose the services. It can be accessed at [http://34.102.214.43/], but the Spring Boot backend is failing health checks.
     - Some time after the project deadline, a fix has been made and now the app can be visited at the IP address given above.
 
 ## Github Actions for CI/CD
@@ -35,3 +36,4 @@ As of the project deadline, the deployment was not ready, but has been resolved 
 - This project uses GitHub Actions in order to trigger an automated build/deploy workflow upon a push to the main branch.
 - The workflow sets up Google Cloud CLI as well as user credentials, before building the Docker images, pushing them to Google Cloud Registry and then deploying these images to GKE.
 - There is also a side workflow for continuous testing of tests written in the Spring Boot backend.
+- After the project deadline, a workflow was set up for deploying the Spring Boot backend to Railway.
