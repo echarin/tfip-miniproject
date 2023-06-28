@@ -4,6 +4,8 @@
 
 **budgetr** is a full stack application with an Angular frontend and a Spring Boot backend. The backend is secured with Spring Security using JWT. The application is containerised and deployed onto a Google Kubernetes Engine (GKE) cluster. The frontend also lightly uses Angular Material.
 
+I didn't manage to fully deploy onto the Kubernetes cluster, so as of now this project is deployed onto Railway and Vercel; this was done after the project deadline.
+
 ## Spring Security
 
 - Upon authenticating through the frontend, the backend returns a JSON web token (JWT).
@@ -17,7 +19,10 @@
 
 - Both the frontend and backend are containerised with Docker, with the instructions in the `Dockerfile` of each project directory.
 - Each `Dockerfile` makes use of caching of layers for faster builds.
-- 
+- The manifests for the Kubernetes cluster are in the `k8s` folder.
+  - The `Deployment` and `Service` components of each portion of the app are defined in a template `.yaml` file.
+  - Both services are internal services.
+  - An Ingress is meant to expose the services. It can be accessed at [http://34.102.214.43/], but the Spring Boot backend is failing health checks.
 
 ## Github Actions for CI/CD
 
