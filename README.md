@@ -6,6 +6,11 @@
 
 Within the project deadline, I didn't manage to fully deploy onto the Kubernetes cluster, so as of now this project is deployed onto Railway and Vercel; this was done after the project deadline.
 
+As of the project deadline, the deployment was not ready, but has been resolved since. If you want to have a look, here are the links:
+
+- Kubernetes Ingress endpoint: [http://34.102.214.43/]
+- Vercel: [https://tfip-miniproject-ykha.vercel.app/]
+
 ## Spring Security
 
 - Upon authenticating through the frontend, the backend returns a JSON web token (JWT).
@@ -23,6 +28,7 @@ Within the project deadline, I didn't manage to fully deploy onto the Kubernetes
   - The `Deployment` and `Service` components of each portion of the app are defined in a template `.yaml` file.
   - Both services are internal services.
   - An `Ingress` is meant to expose the services. It can be accessed at [http://34.102.214.43/], but the Spring Boot backend is failing health checks.
+    - Some time after the project deadline, a fix has been made and now the app can be visited at the IP address given above.
 
 ## Github Actions for CI/CD
 
