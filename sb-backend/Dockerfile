@@ -23,4 +23,4 @@ ENV JWT_SIGNINGKEY=$JWT_SIGNINGKEY
 ENTRYPOINT [ "java", "-jar", "./tfip-miniproject-0.0.1-SNAPSHOT.jar" ]
 
 # Expose the application port
-# EXPOSE 8080
+EXPOSE 8080
