@@ -33,7 +33,7 @@ password: password
   - The amount you put in the expense will be deducted from its category.
 - Once you have made an expense, feel free to add a comment to it by clicking on the expense in the list of expenses.
 - To review your categories, click on `budget`. All categories are displayed.
-- To review your expenses, click on `expenses`. A default of `10` expenses, with no limit on the range for the dates.
+- To review your expenses, click on `expenses`. This page shows a default of `10` expenses, with no limit on the range for the dates.
   - Feel free to specify how many expenses you'd like in a single page, as well as the range for the date.
   - You can also browse through pages using the arrows at the bottom of the table.
 - The goal is to assign each dollar in your budget's money pool such that the amount left is zero.
@@ -102,12 +102,13 @@ password: password
 
 - When a user successfully authenticates, the backend returns a JSON web token (JWT).
   - The JWT contains information about the user, as well as a signature, so that the backend can verify that the sender of the JWT is indeed the correct user.
-- Some endpoints are not protected, such as authentication endpoints and health check endpoints (these are for GKE).
+- Some endpoints are not protected (see [security configuration](sb-backend/src/main/java/ibf2022/tfipminiproject/configs/SecurityConfig.java)), such as [authentication endpoints](sb-backend/src/main/java/ibf2022/tfipminiproject/controllers/AuthenticationController.java) and [health check endpoints for GKE](sb-backend/src/main/java/ibf2022/tfipminiproject/controllers/HealthController.java).
 - Since the backend endpoints hold sensitive information about a user, they are protected.
-- The JWT is stored in your local storage through Angular, and then used in the `Authorization` header when making requests to protected endpoints in the backend.
+  - Requests to protected endpoints without authentication will return a `403 FORBIDDEN` status.
+- The JWT is stored in your local storage through Angular, which passes it into the `Authorization` header using the `Bearer` scheme when making requests to protected endpoints in the backend.
 - This token is also used on the frontend to verify that you are permitted to access its endpoints (e.g. the userId in the endpoint is the same as your userId).
 
-### Making API calls
+### Making authorised API calls to the backend
 
 - You can make an API call to the backend for registration and authentication. No JWT is required.
 - Registration: `/api/v1/auth/register`
@@ -175,20 +176,31 @@ password: password
     - `POST /api/v1/{userId}/{expenseId}/comments` - creates an comment under the user's specified expense
     - `DELETE /api/v1/{userId}/comments/{commentId}` - deletes the user's specified comment
 
-## Containerisation and Kubernetes
+## Containerisation
 
-- Both the frontend and backend are containerised with Docker, with the instructions in the `Dockerfile` of each project directory.
-- Each `Dockerfile` makes use of caching of layers for faster builds.
-- The manifests for the Kubernetes cluster are in the `k8s` folder.
-- The `Deployment` and `Service` components of each portion of the app are defined in a template `.yaml` file.
-- A `Secret` is used for credentials; it was applied before applying the `.yaml` files.
-- Both services are internal services.
-  - An `Ingress` is used to expose the services. It can be accessed [here](http://34.102.214.43/), but the Spring Boot backend is failing health checks.
-    - Some time after the project deadline, a fix has been made and now the app can be visited at the IP address given above.
+- Both the [frontend](ng-frontend/Dockerfile) and [backend](sb-backend/Dockerfile) are containerised with Docker.
+- In an attempt at optimisation, each `Dockerfile` makes use of caching of layers, and multi-stage builds, where one stage uses a base image for building, and a different image for running.
+
+## Kubernetes
+
+- The application is deployed onto a [Google Kubernetes Engine](https://cloud.google.com/kubernetes-engine) cluster on [Google Cloud Platform](https://cloud.google.com/).
+- The manifests for the Kubernetes cluster are in the [k8s folder](k8s).
+- The `Deployment` and `Service` components for both the [frontend](k8s/ng-frontend-template.yaml) and [backend](k8s/sb-backend-template.yaml) are defined in a template `.yaml` file.
+  - Through an automated workflow, the templates are converted to the actual files to be used during deployment. This is explained later in the `GitHub Actions` section.
+- The `Deployment` describes the desired state for each application, such as which Docker image to use, number of replicas to run (set to default at `1`), and so on.
+- For both deployments, a readiness probe is specified. Kubernetes will make diagnostic `HTTP GET` requests to these specified endpoints and ports to check for a desired response (e.g. `200 OK`.)
+  - If a readiness probe fails for a particular instance of a deployment, then that instance is restarted.
+- A `Service` allows networking access to instances of the application (or `Pods`), so that this application can talk to other applications.
+  - Both services are internal services, meaning they can only be accessed from within the cluster.
+- A [Secret](k8s/app-secret-template.yaml), which contains sensitive information such as database credentials and the JWT signing key, is applied.
+  - These values are passed into the specification for the Spring Boot backend deployment, which in turn will be passed as environmental variables for its container.
+- To expose both the frontend and backend, an [Ingress](k8s/app-ingress.yaml) is used.
+  - The `Ingress` manages external access to services within the cluster, such as the services for the frontend and backend.
+  - It routes traffic from specified paths [/**](http://34.102.214.43/) to the frontend and [/api/**](http://34.102.214.43/api) to the backend.
 
 ## Github Actions for CI/CD
 
-- This project uses GitHub Actions in order to trigger automated build/deploy workflow upon pushes to the main branch.
-- The main workflow sets up Google Cloud CLI as well as user credentials, before building the Docker images, pushing them to Google Cloud Registry and then deploying the app to GKE by applying K8s manifest files.
-- There is also a side workflow for continuous testing of tests written in the Spring Boot backend.
-- After the project deadline, a workflow was set up for deploying the Spring Boot backend to Railway.
+- This project uses GitHub Actions in order to trigger automated workflows upon pushes to the main branch.
+- The [main workflow](https://github.com/echarin/tfip-miniproject/actions/workflows/gke-deploy.yml) sets up Google Cloud CLI as well as user credentials, before building the Docker images, pushing them to Google Cloud Registry and then deploying the app to GKE by applying K8s manifest files.
+- There is also a [side workflow](https://github.com/echarin/tfip-miniproject/actions/workflows/sb-ci.yaml) for automated testing of tests written in the Spring Boot backend.
+- After the project deadline, a [workflow](https://github.com/echarin/tfip-miniproject/actions/workflows/railway-deploy.yml) was set up for deploying the Spring Boot backend to Railway.
