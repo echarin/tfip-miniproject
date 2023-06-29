@@ -189,13 +189,12 @@ password: password
 
 - The application is deployed onto a [Google Kubernetes Engine](https://cloud.google.com/kubernetes-engine) cluster on [Google Cloud Platform](https://cloud.google.com/).
 - The manifests for the Kubernetes cluster are in the [k8s folder](k8s).
+- The `Deployment` describes the desired state for each application, such as which Docker image to use, number of replicas to run (set to default at `1`), and so on.
+- A `Service` allows networking access to instances of the application (or `Pods`) via a stable IP and port, so that this application can talk to other applications.
 - The `Deployment` and `Service` components for both the [frontend](k8s/ng-frontend-template.yaml) and [backend](k8s/sb-backend-template.yaml) are defined in a template `.yaml` file.
   - Through an automated workflow, the templates are converted to the actual files to be used during deployment. This is explained later in the `GitHub Actions` section.
-- The `Deployment` describes the desired state for each application, such as which Docker image to use, number of replicas to run (set to default at `1`), and so on.
 - For both deployments, a readiness probe is specified. Kubernetes will make diagnostic `HTTP GET` requests to these specified endpoints and ports to check for a desired response (e.g. `200 OK`.)
   - If a readiness probe fails for a particular instance of a deployment, then that instance is restarted.
-- A `Service` allows networking access to instances of the application (or `Pods`), so that this application can talk to other applications.
-  - Both services are internal services, meaning they can only be accessed from within the cluster.
 - A [Secret](k8s/app-secret-template.yaml), which contains sensitive information such as database credentials and the JWT signing key, is applied.
   - These values are passed into the specification for the Spring Boot backend deployment, which in turn will be passed as environmental variables for its container.
 - To expose both the frontend and backend, an [Ingress](k8s/app-ingress.yaml) is used.
