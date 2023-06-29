@@ -153,7 +153,7 @@ password: password
   - Under the `Authorization` header, use the `Bearer` scheme and paste the token inside.
 - The `UUIDs` you see in the frontend correspond to an entity's UUID.
 - Even while you are authenticated, the backend checks for these for security purposes:
-  - The `{userId}` you've passed into the endpoint matches the `userId` corresponding to your JWT.
+  - The `userId` you've passed into the endpoint matches the `userId` corresponding to your JWT.
   - A resource that you are trying to access must belong to you. These checks are done in [Service](sb-backend/src/main/java/ibf2022/tfipminiproject/services) classes which handle entities.
     - For example, if you have specified your own `userId`, you cannot specify a `Budget` of another user, because that `Budget` does not belong to you.
     - In another example, when trying to save an `Expense` to a `Category`, you cannot specify a `Category` that does not belong to you.
