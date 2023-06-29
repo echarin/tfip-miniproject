@@ -33,7 +33,7 @@ As of the project deadline, the deployment was not ready, but the issue has been
 
 ## Github Actions for CI/CD
 
-- This project uses GitHub Actions in order to trigger an automated build/deploy workflow upon a push to the main branch.
-- The workflow sets up Google Cloud CLI as well as user credentials, before building the Docker images, pushing them to Google Cloud Registry and then deploying these images to GKE.
+- This project uses GitHub Actions in order to trigger automated build/deploy workflow upon pushes to the main branch.
+- The main workflow sets up Google Cloud CLI as well as user credentials, before building the Docker images, pushing them to Google Cloud Registry and then deploying the app to GKE by applying K8s manifest files.
 - There is also a side workflow for continuous testing of tests written in the Spring Boot backend.
 - After the project deadline, a workflow was set up for deploying the Spring Boot backend to Railway.
