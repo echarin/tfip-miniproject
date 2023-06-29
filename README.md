@@ -59,7 +59,7 @@ password: password
 
 - The backend makes use of Spring Data JPA with Hibernate and Spring Data MongoDB to reduce the effort of implementing simple CRUD methods, as well as creating custom queries.
 - The relationships between entities have been mapped in the classes themselves, as such:
-  - One [user](sb-backend\src\main\java\ibf2022\tfipminiproject\sqlentities\User.java) to one [budget]([label](sb-backend/src/main/java/ibf2022/tfipminiproject/sqlentities/Budget.java))
+  - One [user](sb-backend/src/main/java/ibf2022/tfipminiproject/sqlentities/User.java) to one [budget](sb-backend/src/main/java/ibf2022/tfipminiproject/sqlentities/Budget.java)
   - One budget to many categories
   - One category to many expenses
   - One expense to many comments
