@@ -1,19 +1,10 @@
 # tfip-miniproject
 
+**This project is no longer being deployed.**
+
 **budgetr** is a small budget planner application inspired by YNAB. It was coded for me to learn key concepts related to site reliability engineering such as containerisation, Kubernetes and continuous integration/continuous deployment.
 
 **budgetr** is a full stack application with an Angular frontend and a Spring Boot backend. The frontend lightly uses Angular Material. The backend is secured with Spring Security using JWT. The application is containerised and deployed onto a Google Kubernetes Engine (GKE) cluster on Google Cloud Platform (GCP). And finally, the whole project is built and deployed with an automated CI/CD workflow through GitHub Actions.
-
-Within the project deadline, I didn't manage to fully deploy onto the Kubernetes cluster. Therefore, this project is also deployed onto Railway and Vercel; this was done after the project deadline.
-
-As of the project deadline, the deployment was not ready, but the issue has been resolved since. If you want to have a look, here are the links:
-
-- **GKE cluster on GCP**
-  - [Frontend endpoint](http://34.102.214.43/)
-  - [Backend endpoint](http://34.102.214.43/api) (requires authentication)
-- **Vercel and Railway Deployment**
-  - [Frontend on Vercel](https://tfip-miniproject-ykha.vercel.app/)
-  - [Backend on Railway](https://tart-throat-production.up.railway.app/) (requires authentication)
 
 ## budgetr
 
